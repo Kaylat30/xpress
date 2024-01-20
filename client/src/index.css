@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+  
+  .main {
+    width: calc(100% - 300px);
+    left: 300px;
+  }
+  .main-active {
+    width: calc(100% - 80px);
+    left: 80px;
+  }
+  @media (max-width: 480px)
+  {
+    .main {
+      width: calc(100% - 170px);
+      left: 170px;
+    }
+    .main-active {
+      width: calc(100% - 60px);
+      left: 60px;
+    }
+  }
+
+  /* =============== Navigation ================ */
+.navigation {
+  
+}
+
+.navigation .li {
+  position: relative;
+  width: 100%;
+  list-style: none;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.navigation .li:hover,
+.navigation .li.hovered {
+  background-color: white;
+}
+
+.navigation .li:hover,
+.navigation .li.hovered {
+  color: blue;
+}
+
+.navigation .icon {
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 60px;
+  line-height: 75px;
+  text-align: center;
+}
+.navigation ul li a .icon{
+  font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+}
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+}
