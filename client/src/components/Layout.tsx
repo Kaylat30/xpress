@@ -3,24 +3,30 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5"
-import { useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { setActive } from "../slice/activeSlice";
 
 export default function Layout()
 {
-    const [isActive, setIsActive] = useState(false);
+    interface RootState {
+        active: {
+          isActive: boolean;
+        };
+        
+      }
 
-    const handleClick = () => {
-        setIsActive(!isActive);
-    };
+    const dispatch = useDispatch()
+    const {isActive} = useSelector((store:RootState)=>store.active)
+    
     return(
         <div className="relative w-full"> 
             <Sidebar /> 
             <div className={`absolute min-h-screen bg-white transition-all duration-500 ease-in-out ${isActive ? 'main-active pl-3' : 'main'}`}>
                 <div className="relative">
-                    <button onClick={()=>handleClick()} className={`absolute sm:text-2xl bg-white rounded-full p-1 sm:p-2 top-5 ${isActive ? 'sm:-left-8 -left-6' : 'sm:-left-8 -left-3'}  `}>{isActive?<IoChevronForwardOutline />:<IoChevronBackOutline />}</button>
+                    <button onClick={()=>dispatch(setActive())} className={`fixed transition-all duration-500 ease-in-out z-10 sm:text-2xl text-xl bg-white rounded-full p-1 sm:p-2 top-5 ${isActive ? 'menu-btn-active' : 'menu-btn'}  `}>{isActive?<IoChevronForwardOutline />:<IoChevronBackOutline />}</button>
                 </div>
-                <Header />
-                <main className="">
+                <Header/>
+                <main className="mt-20">
                     <Outlet />
                 </main>
                 <Footer /> 

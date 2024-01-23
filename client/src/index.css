@@ -11,6 +11,12 @@
     width: calc(100% - 80px);
     left: 80px;
   }
+  .menu-btn{
+    left: 270px;
+  }
+  .menu-btn-active{
+    left: 62px;
+  }
   @media (max-width: 480px)
   {
     .main {
@@ -20,6 +26,12 @@
     .main-active {
       width: calc(100% - 60px);
       left: 60px;
+    }
+    .menu-btn{
+      left: 158px;
+    }
+    .menu-btn-active{
+      left: 50px;
     }
   }
 

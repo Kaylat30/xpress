@@ -1,17 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../slice/themeSlice';
-//import { RootState } from '@reduxjs/toolkit/query';
-import { RootState } from '../store';
 import { useEffect, useState } from 'react';
 import { IoSunnyOutline,IoMoon,IoDesktopOutline } from "react-icons/io5";
 
 const ThemeToggle: React.FC = () => {
-  const dispatch = useDispatch();
-  const currentTheme = useSelector((state: RootState) => state.theme.mode);
-
-  const handleToggle = () => {
-    dispatch(toggleTheme());
-  };
+  
 
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme"):"system"
@@ -73,9 +64,6 @@ const ThemeToggle: React.FC = () => {
   
   return (
     <div>
-      <button className='dark:text-white' onClick={handleToggle}>
-        Toggle {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
-      </button>
       <div className='duration-100 dark:bg-slate-800 bg-gray-100 rounded'>
         
         {options?.map((opt) => (
