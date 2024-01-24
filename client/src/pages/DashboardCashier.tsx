@@ -1,7 +1,7 @@
 import { IoAddSharp, IoCloseSharp, IoEyeSharp, IoPencilSharp, IoSearchSharp, IoTrashBinSharp } from "react-icons/io5"
 import { Form } from "react-router-dom"
 import { useState } from "react";
-export default function Staff() {
+export default function DashboardCashier() {
 
   const [viewModal, setviewModal] = useState(false);
   const [addModal, setaddModal] = useState(false);
@@ -37,9 +37,9 @@ export default function Staff() {
 
   return (
     <div>
-      {/* search section */}
+      
       <div>
-        
+        {/* search section */}
         <div className="flex items-center justify-center">
             <div>Search by: </div>
             <Form className="relative z-0">
@@ -59,48 +59,133 @@ export default function Staff() {
             
         </div>
 
-        <div className="bg-white shadow-xl rounded-md w-auto mx-2 flex flex-col justify-center">
-                <div className="flex justify-between p-2">
-                    <h1 className="text-brightBlue sm:text-2xl text-lg">All staff</h1>
-                    <button type="button" onClick={() => setaddModal(true)} className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center"><span className="text-2xl text-white"><IoAddSharp/></span> Add Staff</button>
-                </div>
-                <div className="overflow-x-auto">
-                <table className="text-left w-full">
-                  <thead className="flex w-full">
-                    <tr className="flex w-full mb-4">
-                      <th className="p-4 w-1/4">Id</th>
-                      <th className="p-4 w-1/4">Name</th>
-                      <th className="p-4 w-1/4">Sex</th>
-                      <th className="p-4 w-1/4">Branch</th>
-                      <th className="p-4 w-1/4">Contact</th>
-                      <th className="p-4 w-1/4">Role</th>
-                      <th className="p-4 w-1/4">Email</th>
-                      <th className="p-4 w-1/4">Email</th>
-                    </tr>
-                  </thead>
-                        <tbody className="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full h-96" >
-                        {data.map((item) => (
-                            <tr key={item.id} className="flex w-full mb-4">
-                            <td className="p-4 w-1/4 border-b">{item.name}</td>
-                            <td className="p-4 w-1/4 border-b">${item.price}</td>
-                            <td className="p-4 w-1/4 border-b">{item.payment}</td>
-                            <td className="p-4 w-1/4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
-                            <td className="p-4 w-1/4 border-b">098778485</td>
-                            <td className="p-4 w-1/4 border-b">Cashier</td>
-                            <td className="p-4 w-1/4 border-b">jnjgnejfg@gnfj.com</td>
-                            <td className="p-4 w-1/4 border-b">
-                              <div className="flex space-x-2">
-                                <button type="button" onClick={() => setviewModal(true)} className="text-blue-700"><IoEyeSharp/></button>
-                                <button type="button" onClick={() => setaddModal(true)} className="text-green-500"><IoPencilSharp/></button>
-                                <button type="button" onClick={() => setdeleteModal(true)} className="text-red-600">< IoTrashBinSharp/></button>
-                              </div>
-                            </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </div>
+        
+
+        <div className="lg:flex lg:justify-evenly grid grid-cols-1 grid-rows-2">
+            <div className="space-y-2 bg-white rounded-lg shadow-xl p-5 h-40">
+                <h2 className="font-semibold">Received Items</h2>
+                <Form className="space-y-2">
+                    <span>ItemID:</span>
+                    <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id"/>
+                    <button type="submit" className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center"><span className="text-2xl text-white"><IoAddSharp/></span> Add Item</button>
+                </Form>
+            </div>
+            <div className="space-y-2 bg-white rounded-lg shadow-xl p-5">
+                <h2 className="font-semibold">CheckOut</h2>
+                <Form className="space-y-2 ">
+                    <div className="grid grid-cols-1 grid-rows-4 lg:grid-rows-2 lg:grid-cols-2">
+                        <div className="m-1">
+                        <span>ItemID:</span>
+                        <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id"/>
+                        </div>
+                        <div className="m-1">
+                        <span>ItemID:</span>
+                        <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id"/>
+                        </div>
+                        <div className="m-1">
+                        <span>ItemID:</span>
+                        <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id"/>
+                        </div>
+                        <div className="m-1">
+                        <span>ItemID:</span>
+                        <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id"/>
+                        </div>  
+                    </div>
+                                    
+                    
+                    <button type="submit" className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center"><span className="text-2xl text-white"><IoAddSharp/></span> Add Item</button>
+                    
+                </Form>
+            </div>            
         </div>
+
+        <div className="m-2 lg:flex grid grid-cols-1 grid-rows-2 space-y-2">
+            <div className="bg-white shadow-xl rounded-md w-auto lg:w-2/3 mx-2 flex flex-col justify-center">
+                    <div className="flex justify-between p-2">
+                        <h1 className="text-brightBlue sm:text-2xl text-lg">Staged Items</h1>
+                        {/* <button type="button" onClick={() => setaddModal(true)} className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center"><span className="text-2xl text-white"><IoAddSharp/></span> Add Staff</button> */}
+                    </div>
+                    <div className="overflow-x-auto">
+                    <table className="text-left w-full">
+                    <thead className="flex w-full">
+                        <tr className="flex w-full mb-4">
+                        <th className="p-4 w-1/4">Id</th>
+                        <th className="p-4 w-1/4">Name</th>
+                        <th className="p-4 w-1/4">Sex</th>
+                        <th className="p-4 w-1/4">Branch</th>
+                        <th className="p-4 w-1/4">Contact</th>
+                        <th className="p-4 w-1/4">Role</th>
+                        <th className="p-4 w-1/4">Email</th>
+                        <th className="p-4 w-1/4">Email</th>
+                        </tr>
+                    </thead>
+                            <tbody className="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full h-96" >
+                            {data.map((item) => (
+                                <tr key={item.id} className="flex w-full mb-4">
+                                <td className="p-4 w-1/4 border-b">{item.name}</td>
+                                <td className="p-4 w-1/4 border-b">${item.price}</td>
+                                <td className="p-4 w-1/4 border-b">{item.payment}</td>
+                                <td className="p-4 w-1/4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
+                                <td className="p-4 w-1/4 border-b">098778485</td>
+                                <td className="p-4 w-1/4 border-b">Cashier</td>
+                                <td className="p-4 w-1/4 border-b">jnjgnejfg@gnfj.com</td>
+                                <td className="p-4 w-1/4 border-b">
+                                <div className="flex space-x-2">
+                                    <button type="button" onClick={() => setviewModal(true)} className="text-blue-700"><IoEyeSharp/></button>
+                                    <button type="button" onClick={() => setaddModal(true)} className="text-green-500"><IoPencilSharp/></button>
+                                    <button type="button" onClick={() => setdeleteModal(true)} className="text-red-600">< IoTrashBinSharp/></button>
+                                </div>
+                                </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+            <div className="bg-white shadow-xl rounded-md w-auto lg:w-1/3 mx-2 flex flex-col justify-center">
+                    <div className="flex justify-between p-2">
+                        <h1 className="text-brightBlue sm:text-2xl text-lg">Received Items</h1>
+                        {/* <button type="button" onClick={() => setaddModal(true)} className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center"><span className="text-2xl text-white"><IoAddSharp/></span> Add Staff</button> */}
+                    </div>
+                    <div className="overflow-x-auto">
+                    <table className="text-left w-full">
+                    <thead className="flex w-full">
+                        <tr className="flex w-full mb-4">
+                        <th className="p-4 w-1/4">Id</th>
+                        <th className="p-4 w-1/4">Name</th>
+                        <th className="p-4 w-1/4">Sex</th>
+                        <th className="p-4 w-1/4">Branch</th>
+                        <th className="p-4 w-1/4">Contact</th>
+                        <th className="p-4 w-1/4">Role</th>
+                        <th className="p-4 w-1/4">Email</th>
+                        <th className="p-4 w-1/4">Email</th>
+                        </tr>
+                    </thead>
+                            <tbody className="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full h-96" >
+                            {data.map((item) => (
+                                <tr key={item.id} className="flex w-full mb-4">
+                                <td className="p-4 w-1/4 border-b">{item.name}</td>
+                                <td className="p-4 w-1/4 border-b">${item.price}</td>
+                                <td className="p-4 w-1/4 border-b">{item.payment}</td>
+                                <td className="p-4 w-1/4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
+                                <td className="p-4 w-1/4 border-b">098778485</td>
+                                <td className="p-4 w-1/4 border-b">Cashier</td>
+                                <td className="p-4 w-1/4 border-b">jnjgnejfg@gnfj.com</td>
+                                <td className="p-4 w-1/4 border-b">
+                                <div className="flex space-x-2">
+                                    <button type="button" onClick={() => setviewModal(true)} className="text-blue-700"><IoEyeSharp/></button>
+                                    <button type="button" onClick={() => setaddModal(true)} className="text-green-500"><IoPencilSharp/></button>
+                                    <button type="button" onClick={() => setdeleteModal(true)} className="text-red-600">< IoTrashBinSharp/></button>
+                                </div>
+                                </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+        
 
         {addModal ? (
         <>

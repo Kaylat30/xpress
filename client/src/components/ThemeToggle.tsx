@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IoSunnyOutline,IoMoon,IoDesktopOutline } from "react-icons/io5";
+import { IoSunnyOutline,IoMoon} from "react-icons/io5";
 
 const ThemeToggle: React.FC = () => {
   
@@ -19,10 +19,10 @@ const ThemeToggle: React.FC = () => {
       icon:<IoMoon/>,
       text:"dark"
     },
-    {
-      icon:<IoDesktopOutline/>,
-      text:"system"
-    },
+    // {
+    //   icon:<IoDesktopOutline/>,
+    //   text:"system"
+    // },
   ]
 
   function onWindowMatch(){

@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
 import logo from "../imgs/logo.png"
-import { IoHome, IoLogOutSharp, IoSettings,IoPeopleSharp ,IoPieChartSharp  } from "react-icons/io5";
-import { FaTruckFast } from "react-icons/fa6";
+import { IoHome, IoLogOutSharp, IoSettings  } from "react-icons/io5";
 import { useDispatch} from "react-redux";
 import { setActive } from "../slice/activeLinkSlice";
 
-export default function Sidebar() {
+export default function SidebarDriver() {
  
   const dispatch = useDispatch();
 
@@ -13,28 +12,28 @@ const navigations =[
     {
         icon: <IoHome/>,
         name: "Dashboard",
-        to:"/admin",
+        to:"/driver",
     },
-    {
-      icon: <IoPeopleSharp/>,
-      name: "Staff",
-      to:"staff",
-    },
-    {
-      icon: <IoPieChartSharp />,
-      name: "Analysis",
-      to:"analysis",
-    },
-    {
-      icon: <IoPeopleSharp/>,
-      name: "Clients",
-      to:"clients",
-    },
-    {
-      icon: <FaTruckFast />,
-      name: "Deliveries",
-      to:"deliveries",
-    },
+    // {
+    //   icon: <IoPeopleSharp/>,
+    //   name: "Staff",
+    //   to:"staff",
+    // },
+    // {
+    //   icon: <IoPieChartSharp />,
+    //   name: "Analysis",
+    //   to:"analysis",
+    // },
+    // {
+    //   icon: <IoPeopleSharp/>,
+    //   name: "Clients",
+    //   to:"clients",
+    // },
+    // {
+    //   icon: <FaTruckFast />,
+    //   name: "Deliveries",
+    //   to:"deliveries",
+    // },
     {
       icon: <IoSettings/>,
       name: "Settings",
@@ -43,8 +42,7 @@ const navigations =[
 ]
 const activeStyles: React.CSSProperties = {
   fontWeight: "bold",
-  color: 'blue',
-  backgroundColor: 'white'
+  color: "",
 }
 
 // interface RootState {
@@ -68,9 +66,9 @@ const activeStyles: React.CSSProperties = {
             <h1 className="font-bold text-xl sm:text-2xl text-white">Xpress</h1>
         </div>
         <nav className="space-y-1">
-            {navigations.map((nav,)=>(
+            {navigations.map((nav,index)=>(
                 <NavLink 
-                key={nav.to} 
+                key={index} 
                 to={nav.to}                
                 onClick={() => handleNavLinkClick(nav.name)}
                 style={({isActive}) => isActive ? activeStyles : undefined}

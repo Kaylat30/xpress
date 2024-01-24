@@ -108,22 +108,22 @@ export  function Dashboard(){
                     <button className="bg-brightBlue text-white rounded-md sm:p-2 px-1">View All</button>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white">
-                        <thead>
-                        <tr>
-                            <th className="py-2 px-4">Name</th>
-                            <th className="py-2 px-4">Price</th>
-                            <th className="py-2 px-4">Payment</th>
-                            <th className="py-2 px-4">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody >
+                <table className="text-left w-full">
+                  <thead className="flex w-full">
+                    <tr className="flex w-full mb-4">
+                      <th className="p-4 w-1/4">One</th>
+                      <th className="p-4 w-1/4">Two</th>
+                      <th className="p-4 w-1/4">Three</th>
+                      <th className="p-4 w-1/4">Four</th>
+                    </tr>
+                  </thead>
+                        <tbody className="bg-grey-light flex flex-col items-center justify-between w-full" >
                         {data.map((item) => (
-                            <tr key={item.id} className="my-2">
-                            <td className="py-4 px-4 border-b">{item.name}</td>
-                            <td className="py-4 px-4 border-b">${item.price}</td>
-                            <td className="py-4 px-4 border-b">{item.payment}</td>
-                            <td className="py-4 px-4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
+                            <tr key={item.id} className="flex w-full mb-4">
+                            <td className="p-4 w-1/4 border-b">{item.name}</td>
+                            <td className="p-4 w-1/4 border-b">${item.price}</td>
+                            <td className="p-4 w-1/4 border-b">{item.payment}</td>
+                            <td className="p-4 w-1/4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
                             </tr>
                         ))}
                         </tbody>
@@ -133,8 +133,8 @@ export  function Dashboard(){
             
             <div>
                 <div className="bg-white shadow-xl rounded-md pl-5 md:w-96 mx-2">
-                    <h1 className="text-brightBlue text-2xl my-3">Recent Clients</h1>
-                    <div className="">
+                    <h1 className="text-brightBlue text-2xl my-2">Recent Clients</h1>
+                    <div className="space-y-5 ">
                         {clients.map((client)=>(
                             <div className="flex hover:bg-brightBlue hover:text-white cursor-pointer">
                                 <img className="w-12" src={profile} alt="" />
@@ -150,7 +150,7 @@ export  function Dashboard(){
 
                 <div className="bg-white shadow-xl rounded-md pl-5 md:w-96 mx-2" >
                     <h1 className="text-brightBlue text-2xl my-3">Recent Clients</h1>
-                    <div className="">
+                    <div className="space-y-5 ">
                         {clients.map((client)=>(
                             <div className="flex hover:bg-brightBlue hover:text-white cursor-pointer">
                             <img className="w-12" src={profile} alt="" />
