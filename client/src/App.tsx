@@ -17,7 +17,7 @@ import DashboardCashier from "./pages/DashboardCashier";
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route>
-    <Route path="login" element={<Login/>}/>
+    <Route path="/" element={<Login/>}/>
     <Route path="/admin" element={<Layout />} errorElement={<Error />}>
       <Route index element={<Dashboard />}/>
       <Route path="analysis" element={<Analysis/>}/>
