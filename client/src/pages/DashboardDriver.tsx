@@ -73,6 +73,7 @@ export default function DashboardDriver() {
                       <th className="p-4 w-1/4">PickUp</th>
                       <th className="p-4 w-1/4">DropOff</th>
                       <th className="p-4 w-1/4">Status</th>
+                      <th className="p-4 w-1/4">DriverId</th>
                       <th className="p-4 w-1/4"></th>
                     </tr>
                   </thead>
