@@ -1,7 +1,9 @@
 import profile from "../imgs/profile.png" 
 import { useSelector} from "react-redux";
+import { selectFirstName } from "../slice/userSlice";
 
 export default function Header() {
+  const firstName = useSelector(selectFirstName);
 
   interface RootState {
     active: {
@@ -20,7 +22,7 @@ const {activeLink} = useSelector((state:RootState) => state.activelink);
       <h2 className="sm:text-2xl font-bold">{activeLink}</h2>
       <div className="flex items-center space-x-1">        
         <img className=" w-6 sm:w-12 bg-white rounded-full" src={profile} alt="" />        
-        <div className="sm:text-xl">Kayondo Abdulatif</div>
+        <div className="sm:text-xl">{firstName}</div>
       </div>
     </div>
     </>

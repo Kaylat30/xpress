@@ -1,12 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.png"
 import { IoHome, IoLogOutSharp, IoSettings  } from "react-icons/io5";
 import { useDispatch} from "react-redux";
 import { setActive } from "../slice/activeLinkSlice";
+import { logoutUserAsync } from "../slice/userSlice"; 
+import { AppDispatch } from "../store";
 
 export default function SidebarCashier() {
  
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
 const navigations =[
     {
@@ -57,6 +60,14 @@ const activeStyles: React.CSSProperties = {
   const handleNavLinkClick = (name:string) => {
     dispatch(setActive(name));
   };
+
+  const handleLogout = () => {
+    dispatch(logoutUserAsync()).then(() => {
+      navigate('/'); 
+    });
+  };
+
+
   return (
     <> 
       <div className="fixed bg-brightBlue w-72 h-full transition-all duration-500 ease-in-out overflow-hidden">
@@ -82,8 +93,11 @@ const activeStyles: React.CSSProperties = {
         </nav>
 
         <div className="relative">
-          <button className=" absolute -bottom-24 w-56  h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white rounded-3xl">
-            <div className="text-xl sm:text-3xl"><IoLogOutSharp/></div>
+        <button 
+            onClick={handleLogout}
+            className="absolute -bottom-24 w-56 h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white rounded-3xl"
+          >
+            <div className="text-xl sm:text-3xl"><IoLogOutSharp /></div>
             <h3 className="sm:text-xl">Sign Out</h3>
           </button>
         </div>        

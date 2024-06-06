@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { logoutUser,url } from '../api';
 
 interface User {
-  firstName: string;
-  lastName: string;
+  firstname: string;
   role: string;
 }
 
@@ -25,11 +24,7 @@ const initialState: UserState = {
 
 export const loginUserAsync = createAsyncThunk<User, { email: string; password: string }, { rejectValue: { message: string } }>(
     'user/loginUser',
-    async ({ email, password }, { rejectWithValue }) => {
-      const requestBody = {
-        email,
-        password,
-      };
+    async ({ email, password }, { rejectWithValue }) => {      
   
       try {
         const res = await fetch(`${url}/login`, {
@@ -37,7 +32,7 @@ export const loginUserAsync = createAsyncThunk<User, { email: string; password: 
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({staffId:email,password:password}),
           credentials: 'include',
         });
   
@@ -126,8 +121,7 @@ export const selectUser = (state: { user: UserState }) => state.user.user;
 export const selectStatus = (state: { user: UserState }) => state.user.status;
 export const selectError = (state: { user: UserState }) => state.user.error;
 export const selectSessionExpiresAt = (state: { user: UserState }) => state.user.sessionExpiresAt;
-export const selectFirstName = (state: { user: UserState }) => state.user.user?.firstName;
-export const selectLastName = (state: { user: UserState }) => state.user.user?.lastName;
+export const selectFirstName = (state: { user: UserState }) => state.user.user?.firstname;
 export const selectRole = (state: { user: UserState }) => state.user.user?.role;
 
 export default userSlice.reducer;

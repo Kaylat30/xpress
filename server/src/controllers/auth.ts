@@ -31,14 +31,14 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
         return res.status(500).json({ error: err.message });
       }
 
-      const { password, ...user1 } = user.toObject();
+      // const { password, ...user1 } = user.toObject();
 
-      res.cookie('name', JSON.stringify({ firstname: user1.name }), {
-        maxAge: 60000,
-        // secure: true,
-      });
+      // res.cookie('name', JSON.stringify({ firstname: user1.name }), {
+      //   maxAge: 60000,
+      //   // secure: true,
+      // });
 
-      res.status(200).json({ success: true, message: 'Logged in successfully' });
+      res.status(200).json({ success: true, message: 'Logged in successfully',firstname:user.name,role:user.role });
     });
   })(req, res, next);
 };

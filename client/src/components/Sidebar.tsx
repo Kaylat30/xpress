@@ -1,94 +1,192 @@
-import { NavLink } from "react-router-dom";
-import logo from "../imgs/logo.png"
-import { IoHome, IoLogOutSharp, IoSettings,IoPeopleSharp ,IoPieChartSharp  } from "react-icons/io5";
+// import { NavLink } from "react-router-dom";
+// import logo from "../imgs/logo.png"
+// import { IoHome, IoLogOutSharp, IoSettings,IoPeopleSharp ,IoPieChartSharp  } from "react-icons/io5";
+// import { FaTruckFast } from "react-icons/fa6";
+// import { useDispatch} from "react-redux";
+// import { setActive } from "../slice/activeLinkSlice";
+
+// export default function Sidebar() {
+ 
+//   const dispatch = useDispatch();
+
+// const navigations =[
+//     {
+//         icon: <IoHome/>,
+//         name: "Dashboard",
+//         to:"/admin",
+//     },
+//     {
+//       icon: <IoPeopleSharp/>,
+//       name: "Staff",
+//       to:"staff",
+//     },
+//     {
+//       icon: <IoPieChartSharp />,
+//       name: "Analysis",
+//       to:"analysis",
+//     },
+//     {
+//       icon: <IoPeopleSharp/>,
+//       name: "Clients",
+//       to:"clients",
+//     },
+//     {
+//       icon: <FaTruckFast />,
+//       name: "Deliveries",
+//       to:"deliveries",
+//     },
+//     {
+//       icon: <IoSettings/>,
+//       name: "Settings",
+//       to:"settings",
+//     },
+// ]
+// const activeStyles: React.CSSProperties = {
+//   fontWeight: "bold",
+//   color: 'blue',
+//   backgroundColor: 'white'
+// }
+
+// // interface RootState {
+// //   activelink: {
+// //     activeLink: boolean;
+// //   };
+  
+// // }
+
+// //const activeLink = useSelector((state:RootState) => state.activelink.activeLink);
+
+//   const handleNavLinkClick = (name:string) => {
+//     dispatch(setActive(name));
+//   };
+//   return (
+//     <> 
+//       <div className="fixed bg-brightBlue w-72 h-full transition-all duration-500 ease-in-out overflow-hidden">
+        
+//         <div className="flex items-center">
+//             <img className=" w-16 sm:w-24" src={logo} alt="" />
+//             <h1 className="font-bold text-xl sm:text-2xl text-white">Xpress</h1>
+//         </div>
+//         <nav className="space-y-1">
+//             {navigations.map((nav,)=>(
+//                 <NavLink 
+//                 key={nav.to} 
+//                 to={nav.to}                
+//                 onClick={() => handleNavLinkClick(nav.name)}
+//                 style={({isActive}) => isActive ? activeStyles : undefined}
+//                 className="w-full h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white hover:bg-white hover:text-brightBlueLight hover:rounded-l-full">
+//                 <div className="text-xl sm:text-3xl">{nav.icon}</div>
+//                 <h3 className="sm:text-xl">{nav.name}</h3>
+//                 </NavLink>
+//             ))}
+            
+            
+//         </nav>
+
+//         <div className="relative">
+//           <button className=" absolute -bottom-24 w-56  h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white rounded-3xl">
+//             <div className="text-xl sm:text-3xl"><IoLogOutSharp/></div>
+//             <h3 className="sm:text-xl">Sign Out</h3>
+//           </button>
+//         </div>        
+//       </div>
+//     </>
+//   );
+// }
+
+
+import { NavLink, useNavigate } from "react-router-dom";
+import logo from "../imgs/logo.png";
+import { IoHome, IoLogOutSharp, IoSettings, IoPeopleSharp, IoPieChartSharp } from "react-icons/io5";
 import { FaTruckFast } from "react-icons/fa6";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setActive } from "../slice/activeLinkSlice";
+import { logoutUserAsync } from "../slice/userSlice"; 
+import { AppDispatch } from "../store";
 
 export default function Sidebar() {
- 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate(); 
 
-const navigations =[
+  const navigations = [
     {
-        icon: <IoHome/>,
-        name: "Dashboard",
-        to:"/admin",
+      icon: <IoHome />,
+      name: "Dashboard",
+      to: "/admin",
     },
     {
-      icon: <IoPeopleSharp/>,
+      icon: <IoPeopleSharp />,
       name: "Staff",
-      to:"staff",
+      to: "staff",
     },
     {
       icon: <IoPieChartSharp />,
       name: "Analysis",
-      to:"analysis",
+      to: "analysis",
     },
     {
-      icon: <IoPeopleSharp/>,
+      icon: <IoPeopleSharp />,
       name: "Clients",
-      to:"clients",
+      to: "clients",
     },
     {
       icon: <FaTruckFast />,
       name: "Deliveries",
-      to:"deliveries",
+      to: "deliveries",
     },
     {
-      icon: <IoSettings/>,
+      icon: <IoSettings />,
       name: "Settings",
-      to:"settings",
+      to: "settings",
     },
-]
-const activeStyles: React.CSSProperties = {
-  fontWeight: "bold",
-  color: 'blue',
-  backgroundColor: 'white'
-}
+  ];
 
-// interface RootState {
-//   activelink: {
-//     activeLink: boolean;
-//   };
-  
-// }
+  const activeStyles: React.CSSProperties = {
+    fontWeight: "bold",
+    color: 'blue',
+    backgroundColor: 'white',
+  };
 
-//const activeLink = useSelector((state:RootState) => state.activelink.activeLink);
-
-  const handleNavLinkClick = (name:string) => {
+  const handleNavLinkClick = (name: string) => {
     dispatch(setActive(name));
   };
+
+  const handleLogout = () => {
+    dispatch(logoutUserAsync()).then(() => {
+      navigate('/'); 
+    });
+  };
+
   return (
-    <> 
+    <>
       <div className="fixed bg-brightBlue w-72 h-full transition-all duration-500 ease-in-out overflow-hidden">
-        
         <div className="flex items-center">
-            <img className=" w-16 sm:w-24" src={logo} alt="" />
-            <h1 className="font-bold text-xl sm:text-2xl text-white">Xpress</h1>
+          <img className="w-16 sm:w-24" src={logo} alt="Logo" />
+          <h1 className="font-bold text-xl sm:text-2xl text-white">Xpress</h1>
         </div>
         <nav className="space-y-1">
-            {navigations.map((nav,)=>(
-                <NavLink 
-                key={nav.to} 
-                to={nav.to}                
-                onClick={() => handleNavLinkClick(nav.name)}
-                style={({isActive}) => isActive ? activeStyles : undefined}
-                className="w-full h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white hover:bg-white hover:text-brightBlueLight hover:rounded-l-full">
-                <div className="text-xl sm:text-3xl">{nav.icon}</div>
-                <h3 className="sm:text-xl">{nav.name}</h3>
-                </NavLink>
-            ))}
-            
-            
+          {navigations.map((nav) => (
+            <NavLink 
+              key={nav.to}
+              to={nav.to}
+              onClick={() => handleNavLinkClick(nav.name)}
+              style={({ isActive }) => isActive ? activeStyles : undefined}
+              className="w-full h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white hover:bg-white hover:text-brightBlueLight hover:rounded-l-full"
+            >
+              <div className="text-xl sm:text-3xl">{nav.icon}</div>
+              <h3 className="sm:text-xl">{nav.name}</h3>
+            </NavLink>
+          ))}
         </nav>
-
         <div className="relative">
-          <button className=" absolute -bottom-24 w-56  h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white rounded-3xl">
-            <div className="text-xl sm:text-3xl"><IoLogOutSharp/></div>
+          <button 
+            onClick={handleLogout}
+            className="absolute -bottom-24 w-56 h-14 flex items-center space-x-6 pl-5 sm:pl-7 no-underline text-white rounded-3xl"
+          >
+            <div className="text-xl sm:text-3xl"><IoLogOutSharp /></div>
             <h3 className="sm:text-xl">Sign Out</h3>
           </button>
-        </div>        
+        </div>
       </div>
     </>
   );

@@ -8,19 +8,25 @@ import packSlice from "./slice/packSlice";
 import itemSlice from "./slice/itemSlice";
 import staffSlice from "./slice/staffSlice";
 import stageSlice from "./slice/stageSlice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+
+export type RootState = ReturnType<typeof store.getState>;
+const store = configureStore({
+  reducer: {
+    active: activeReducer,
+    activelink:activeLinkReducer,
+    user:userSlice,
+    clients:clientSlice,
+    delivery:deliverySlice,
+    pack:packSlice,
+    item:itemSlice,
+    staff:staffSlice,
+    stagedItems:stageSlice
+  },
   
-  const store = configureStore({
-    reducer: {
-      active: activeReducer,
-      activelink:activeLinkReducer,
-      user:userSlice,
-      clients:clientSlice,
-      delivery:deliverySlice,
-      pack:packSlice,
-      item:itemSlice,
-      staff:staffSlice,
-      stagedItems:stageSlice
-    },
-    
-  });
-  export default store;
+});
+
+export type AppDispatch = typeof store.dispatch
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export default store;

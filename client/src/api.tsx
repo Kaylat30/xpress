@@ -9,7 +9,7 @@ export const url: string = "http://localhost:3000";
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({staffId:email,password:password}),
       });
   
       if (!response.ok) {

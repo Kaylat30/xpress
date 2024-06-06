@@ -5,6 +5,7 @@ const LocalStrategy = Strategy;
 export function initializePassport(passport) {
     const authenticateUser = async (staffId, password, done) => {
         try {
+            console.log(staffId, password)
             const user = await Staff.findOne({ staffId: staffId });
             if (!user) {
                 return done(null, false, { message: "No user found with this email address" });
