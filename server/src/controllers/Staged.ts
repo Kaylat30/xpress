@@ -16,10 +16,11 @@ interface StagedDocument extends Document {
   contact: number;
   email: string;
   user: string;
+  branch:string
 }
 
 //add Item
-export const addItem = async (req: Request, res: Response) => {
+export const addStagedItem = async (req: Request, res: Response) => {
     try {
 
       
@@ -33,12 +34,12 @@ export const addItem = async (req: Request, res: Response) => {
         const clientCount = await Client.countDocuments();
         const clientId = `${currentYear}/CL/${(clientCount + 1).toString().padStart(3, '0')}`;
 
-        // Generate itemId 
-        const itemCount = await Delivery.countDocuments();
+        // Generate itemId  
+        const itemCount = await Staged.countDocuments();
         const itemId = `${currentYear}/DI/${(itemCount + 1).toString().padStart(3, '0')}`;
 
         let addToStaged = new Staged({
-            itemId: itemId,
+            itemId:itemId,
             item:item,
             status:"Pending",
             clientId:clientId,
@@ -47,6 +48,7 @@ export const addItem = async (req: Request, res: Response) => {
             contact:contact,
             email:email,
             user:staffId,
+            branch:branch
             // session:sessionID
         })
         const savedToStaged = await addToStaged.save();
@@ -74,7 +76,7 @@ export const addItem = async (req: Request, res: Response) => {
         const savedToDelivery = await addToDelivery.save();
 
         let addToPack = new Pack({
-            itemId: itemId,
+            ItemId:itemId,
             item:item,
             status:"Pending",
             pickup:branch,
@@ -83,7 +85,7 @@ export const addItem = async (req: Request, res: Response) => {
         const savedToPack = await addToPack.save();
 
 
-        return res.status(201).json({Staged:savedToStaged,Client:savedToClient,Delievery:savedToDelivery,pack:savedToPack});
+        return res.status(201).json({Staged:savedToStaged,Client:savedToClient,pack:savedToPack,Delivery:savedToDelivery});
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json({
@@ -102,11 +104,11 @@ export const addItem = async (req: Request, res: Response) => {
 
 
 //get item
-export const getItem = async (req: Request, res: Response) => {
+export const getStagedItem = async (req: Request, res: Response) => {
     try {
 
       const query: FilterQuery<StagedDocument> = { branch: (req.user as { branch?: string })?.branch };
-
+      
       if (!query.branch) {
         return res.status(404).json({
           success: false,
@@ -114,7 +116,7 @@ export const getItem = async (req: Request, res: Response) => {
         });
       }
    
-      const stagedItems = await Staged.find(query);
+      const stagedItems = await Staged.find();
   
       if (stagedItems.length < 1) {
         return res.status(200).json({ 
@@ -142,16 +144,16 @@ export const getItem = async (req: Request, res: Response) => {
 };
 
 //delete item
-export const deleteItem = async (req: Request, res: Response) => {
+export const deleteStagedItem = async (req: Request, res: Response) => {
     try {
       const { itemId,clientId } = req.body;
       
-      const deletedStagedItem = await Staged.findByIdAndDelete(itemId);
-      const deletedDeliveryItem = await Delivery.findByIdAndDelete(itemId);
-      const deletedPackItem = await Pack.findByIdAndDelete(itemId);
-      const deletedClientItem = await Client.findByIdAndDelete(clientId);
+      const deletedStagedItem = await Staged.findOneAndDelete({ itemId: itemId });
+      const deletedDeliveryItem = await Delivery.findOneAndDelete({ itemId: itemId });
+      const deletedPackItem = await Pack.findOneAndDelete({ itemId: itemId });
+      const deletedClientItem = await Client.findOneAndDelete({ clientId: clientId });
   
-      if (!deletedStagedItem || !deletedDeliveryItem || !deletedClientItem  || !deletedPackItem) {
+      if (!deletedStagedItem || !deletedClientItem  || !deletedPackItem || deletedDeliveryItem) {
         return res.status(404).json({
           success: false,
           message: 'Item not found',
@@ -179,16 +181,16 @@ export const deleteItem = async (req: Request, res: Response) => {
   };
 
   //Updating item
-  export const updateItem = async (req: Request, res: Response) => {
+  export const updateStagedItem = async (req: Request, res: Response) => {
     try {
       const { itemId,item,status,clientId,name,address,contact,email } = req.body; 
-      const staffId = (req.user as { staffId?: string })?.staffId; 
+      const staffId = (req.user as { _id?: string })?._id; 
       const branch = (req.user as { branch?: string })?.branch;
         
 
       // Find the item by its ID
-      const updatedStageditem = await Staged.findByIdAndUpdate(
-        itemId,
+      const updatedStageditem = await Staged.findOneAndUpdate(
+        { itemId: itemId },
         {   
             item:item,
             status:status,
@@ -202,8 +204,8 @@ export const deleteItem = async (req: Request, res: Response) => {
         { new: true } // Return the updated item
       );
 
-      const updatedClientitem = await Client.findByIdAndUpdate(
-        clientId,
+      const updatedClientitem = await Client.findOneAndUpdate(
+        { itemId: itemId },
         {   
             name:name,
             address:address,
@@ -213,8 +215,8 @@ export const deleteItem = async (req: Request, res: Response) => {
         { new: true } // Return the updated item
       );
 
-      const updatedPackitem = await Pack.findByIdAndUpdate(
-        itemId,
+      const updatedPackitem = await Pack.findOneAndUpdate(
+        { itemId: itemId },
         {   
             item:item,
             status:"Pending",
@@ -224,8 +226,8 @@ export const deleteItem = async (req: Request, res: Response) => {
         { new: true } // Return the updated item
       );
 
-      const updatedDeliveryitem = await Delivery.findByIdAndUpdate(
-        itemId,
+      const updatedDeliveryitem = await Delivery.findOneAndUpdate(
+        {itemId:itemId},
         {   
             item:item,
             status:"Pending",
@@ -235,7 +237,7 @@ export const deleteItem = async (req: Request, res: Response) => {
         { new: true } // Return the updated item
       );
   
-      if (!updatedDeliveryitem || !updatedStageditem || !updatedClientitem || !updatedPackitem) {
+      if (!updatedStageditem || !updatedClientitem || !updatedPackitem || updatedDeliveryitem) {
         return res.status(404).json({
           success: false,
           message: 'Item not found',

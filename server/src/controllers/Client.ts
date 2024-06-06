@@ -77,9 +77,9 @@ export const deleteClient = async (req: Request, res: Response) => {
     try {
       const { clientId } = req.body;
       
-      const deletedClient = await Client.findByIdAndDelete(clientId);
-      const deletedStaged = await Staged.findByIdAndDelete(clientId);
-      const deletedReceived = await Received.findByIdAndDelete(clientId);
+      const deletedClient = await Client.findOneAndDelete({ clientId: clientId });
+      const deletedStaged = await Staged.findOneAndDelete({ clientId: clientId });
+      const deletedReceived = await Received.findOneAndDelete({ clientId: clientId });
   
       if (!deletedClient) {
         return res.status(404).json({
@@ -118,8 +118,8 @@ export const deleteClient = async (req: Request, res: Response) => {
       const { clientId,name,contact,address,email  } = req.body; 
 
       // Find the client by id
-      const updatedClient = await Client.findByIdAndUpdate(
-        clientId,
+      const updatedClient = await Client.findOneAndUpdate(
+        {clientId:clientId},
         {   
             name:name,
             address:address,
@@ -129,8 +129,8 @@ export const deleteClient = async (req: Request, res: Response) => {
         { new: true } // Return the updated client
       );
 
-      const updatedStagedClient = await Staged.findByIdAndUpdate(
-        clientId,
+      const updatedStagedClient = await Staged.findOneAndUpdate(
+        {clientId:clientId},
         {   
             name:name,
             address:address,
@@ -140,8 +140,8 @@ export const deleteClient = async (req: Request, res: Response) => {
         { new: true } // Return the updated client
       );
 
-      const updatedReceivedClient = await Received.findByIdAndUpdate(
-        clientId,
+      const updatedReceivedClient = await Received.findOneAndUpdate(
+        {clientId:clientId},
         {   
             name:name,
             address:address,

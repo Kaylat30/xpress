@@ -48,9 +48,10 @@ export function initializePassport(passport: any) {
         done(null, user.staffId);
     });
 
-    passport.deserializeUser(async (id: string, done:any) => {
+    passport.deserializeUser(async (staffId: string, done:any) => {
         try {
-            const user = await Staff.findById(id);
+            //const user = await Staff.findById(id);
+            const user = await Staff.findOne({ staffId: staffId }); 
             done(null, user);
         } catch (err) {
             done(err);

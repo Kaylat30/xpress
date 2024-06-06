@@ -4,7 +4,7 @@ interface ClientDocument extends Document {
     clientId: string;
     name: string;
     address: string;
-    contact: number;
+    contact: string;
     email: string;
 }
 
@@ -29,7 +29,7 @@ const clientSchema = new Schema(
             max: 50,
         },
         contact: {
-            type: Number,
+            type: String,
             required: true,
             max: 50,
         },

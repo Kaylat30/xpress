@@ -14,6 +14,7 @@ import { deleteDelivery, getDelivery, updateDelivery } from "./routes/delivery.j
 import { addClient, getClient,deleteClient, updateClient } from "./routes/client.js";
 import { getPack,updatePack } from "./routes/pack.js";
 import {addItem, getItem, deleteItem, updateItem, checkout} from "./routes/received.js";
+import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem} from "./routes/staged.js";
 const url = 'http://localhost:5173'
 //const url = 'https://heinreach.vercel.app'
 
@@ -54,7 +55,7 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie:{
-        maxAge: 60000, 
+        maxAge: 300000, 
         httpOnly: true,
         //secure:true,   
         //sameSite: 'none'  
@@ -92,6 +93,10 @@ app.use("/addItem",addItem)
 app.use("/getItem",getItem)
 app.use("/deleteItem",deleteItem)
 app.use("/updateItem",updateItem)
+app.use("/addStagedItem",addStagedItem)
+app.use("/getStagedItem",getStagedItem)
+app.use("/deleteStagedItem",deleteStagedItem)
+app.use("/updateStagedItem",updateStagedItem)
 app.use("/getPack",getPack)
 app.use("/updatePack",updatePack)
 app.use("/getDelivery",getDelivery)

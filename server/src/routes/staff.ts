@@ -4,7 +4,7 @@ import { addStaff, getStaff,deleteStaff, updateStaff } from '../controllers/Staf
 const router = express.Router()
 
 router.post("/addStaff",checkAuthenticated,addStaff)
-router.post("/getStaff",checkAuthenticated,getStaff)
+router.get("/getStaff",checkAuthenticated,getStaff)
 router.post("/deleteStaff",checkAuthenticated,deleteStaff)
 router.patch("/updateStaff",updateStaff)
 export {addStaff, getStaff,deleteStaff, updateStaff}

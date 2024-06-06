@@ -41,8 +41,8 @@ export const updatePack = async (req: Request, res: Response) => {
     const driverId = (req.user as { staffId?: string })?.staffId;
 
     // Find the pack by id and update
-    const updatedPack = await Pack.findByIdAndUpdate(
-      itemId,
+    const updatedPack = await Pack.findOneAndUpdate(
+      { itemId: itemId },
       {
         $set: {
           status: 'Approved',
@@ -53,8 +53,8 @@ export const updatePack = async (req: Request, res: Response) => {
     );
 
     // Find the delivery by id and update
-    const updatedDelivery = await Delivery.findByIdAndUpdate(
-      itemId,
+    const updatedDelivery = await Delivery.findOneAndUpdate(
+      { itemId: itemId },
       {
         $set: {
           status: 'Shipped',
@@ -65,7 +65,7 @@ export const updatePack = async (req: Request, res: Response) => {
     );
 
     // Delete staged item by id
-    const deletedItem = await Staged.findByIdAndDelete(itemId);
+    const deletedItem = await Staged.findOneAndDelete({ itemId: itemId });
 
     if (!deletedItem || !updatedPack || !updatedDelivery) {
       return res.status(404).json({

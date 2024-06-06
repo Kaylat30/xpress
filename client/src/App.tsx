@@ -14,6 +14,9 @@ import LayoutCashier from "./components/LayoutCashier";
 import LayoutDriver from "./components/LayoutDriver";
 import DashboardDriver from "./pages/DashboardDriver";
 import DashboardCashier from "./pages/DashboardCashier";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, selectSessionExpiresAt } from './slice/userSlice';
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route>
@@ -37,6 +40,22 @@ const router = createBrowserRouter(createRoutesFromElements(
   </Route>  
 ))
 function App():JSX.Element{
+
+  const dispatch = useDispatch();
+  const sessionExpiresAt = useSelector(selectSessionExpiresAt);
+  //const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const checkSessionExpiry = () => {
+      if (sessionExpiresAt && Date.now() > sessionExpiresAt) {
+        dispatch(logout());
+      }
+    };
+
+    const intervalId = setInterval(checkSessionExpiry, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch, sessionExpiresAt]);
   
 
   return (

@@ -30,14 +30,14 @@ export const addItem = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'productId is required' });
         }
 
-        let item = await Delivery.findById(itemId);
+        let item = await Delivery.findOne({itemId:itemId});
 
         if (!item) {
             return res.status(404).json({ error: 'Product not found' });
         
         }
 
-        let client = await Client.findById(item.clientId);
+        let client = await Client.findOne({clientId:item.clientId});
 
         if (!client) {
             return res.status(404).json({ error: 'Client not found' });
@@ -55,8 +55,8 @@ export const addItem = async (req: Request, res: Response) => {
         })
         const savedItem = await item1.save();
 
-        const updatedDelivery = await Delivery.findByIdAndUpdate(
-            itemId,
+        const updatedDelivery = await Delivery.findOneAndUpdate(
+            {itemId:itemId},
             {
               $set: {
                 status: "Received",
@@ -73,7 +73,7 @@ export const addItem = async (req: Request, res: Response) => {
         });
         }  
 
-        const deletedItem = await Pack.findByIdAndDelete(itemId);
+        const deletedItem = await Pack.findOneAndDelete({itemId:itemId});
   
       if (!deletedItem) {
         return res.status(404).json({
@@ -144,7 +144,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     try {
       const { itemId } = req.body;
       
-      const deletedItem = await Received.findByIdAndDelete(itemId);
+      const deletedItem = await Received.findOneAndDelete({itemId:itemId});
   
       if (!deletedItem) {
         return res.status(404).json({
@@ -180,8 +180,8 @@ export const deleteItem = async (req: Request, res: Response) => {
       const staffId = (req.user as { staffId?: string })?.staffId;
 
       // Find the item by its ID
-      const updatedReceiveditem = await Received.findByIdAndUpdate(
-        itemId,
+      const updatedReceiveditem = await Received.findOneAndUpdate(
+        {itemId:itemId},
         {   
             item:item,
             status:status,
@@ -201,8 +201,8 @@ export const deleteItem = async (req: Request, res: Response) => {
         });
       }
 
-      const updatedDeliveryitem = await Delivery.findByIdAndUpdate(
-        itemId,
+      const updatedDeliveryitem = await Delivery.findOneAndUpdate(
+        {itemId:itemId},
         {   
             item:item,
             status:status,
@@ -247,10 +247,10 @@ export const deleteItem = async (req: Request, res: Response) => {
         const { itemId } = req.body;
         const staffId = (req.user as { staffId?: string })?.staffId;
 
-        await Received.findByIdAndDelete(itemId);
+        await Received.findOneAndDelete({itemId:itemId});
 
-        const updateditem = await Delivery.findByIdAndUpdate(
-            itemId,
+        const updateditem = await Delivery.findOneAndUpdate(
+            {itemId:itemId},
             {   
                 status:"Delivered",
                 cashierOut: staffId,
