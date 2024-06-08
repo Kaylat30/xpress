@@ -72,7 +72,28 @@ export const url: string = "http://localhost:3000";
   
   export const getClients = async () => {
     try {
-      const response = await fetch(`${url}/getClients`)
+      const response = await fetch(`${url}/getClient`)
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      return response.json();
+    } catch (error) {
+        if (error instanceof Error) {
+            return { success: false, error: error.message };
+        }
+    }
+  };
+  export const getClientInfo = async (clientId:string) => {
+    try {
+      const response = await fetch(`${url}/getClientInfo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ clientId }),
+      });
   
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

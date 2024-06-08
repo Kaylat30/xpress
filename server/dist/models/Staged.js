@@ -36,8 +36,14 @@ const stagedSchema = new Schema({
         min: 2,
         max: 50,
     },
+    branch: {
+        type: String,
+        required: true,
+        min: 2,
+        max: 50,
+    },
     contact: {
-        type: Number,
+        type: String,
         required: true,
         min: 10,
         max: 50,

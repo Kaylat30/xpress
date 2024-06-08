@@ -111,5 +111,21 @@
 
 
 
+// {
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "module": "NodeNext",
+//     "esModuleInterop": true,
+//     "moduleResolution": "NodeNext",
+//     "strict": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "skipLibCheck": true,
+//     "baseUrl": "./src",
+//     "paths": {
+//       "*": ["*"]
+//     },
+//     "outDir": "./dist"
+//   }
+// }
 
 

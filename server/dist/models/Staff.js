@@ -38,12 +38,12 @@ const StaffSchema = new mongoose.Schema({
         max: 50,
     },
     contact: {
-        type: Number,
+        type: String,
         required: true,
         max: 50,
     },
     dob: {
-        type: Date,
+        type: String,
         required: true,
         max: 50,
     },

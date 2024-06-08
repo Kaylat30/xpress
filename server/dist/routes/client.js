@@ -1,9 +1,10 @@
 import express from "express";
 import { checkAuthenticated } from "../middleware/passport.js";
-import { addClient, getClient, deleteClient, updateClient } from '../controllers/Client';
+import { addClient, getClient, deleteClient, updateClient, getClientInfo } from '../controllers/Client';
 const router = express.Router();
 router.post("/addClient", checkAuthenticated, addClient);
-router.post("/getClient", checkAuthenticated, getClient);
+router.get("/getClient", checkAuthenticated, getClient);
+router.post("/getClientInfo", checkAuthenticated, getClientInfo);
 router.post("/deleteClient", checkAuthenticated, deleteClient);
 router.patch("/updateClient", updateClient);
-export { addClient, getClient, deleteClient, updateClient };
+export {  getClient, deleteClient, updateClient,getClientInfo,addClient };

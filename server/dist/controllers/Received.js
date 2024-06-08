@@ -1,7 +1,7 @@
-import Client from "../models/Client";
-import Delivery from "../models/Delivery";
-import Pack from "../models/Pack";
-import Received from "../models/Received";
+import Client from "../models/Client.js";
+import Delivery from "../models/Delivery.js";
+import Pack from "../models/Pack.js";
+import Received from "../models/Received.js";
 //add Item
 export const addItem = async (req, res) => {
     try {
@@ -11,11 +11,11 @@ export const addItem = async (req, res) => {
         if (!itemId) {
             return res.status(400).json({ error: 'productId is required' });
         }
-        let item = await Delivery.findById(itemId);
+        let item = await Delivery.findOne({ itemId: itemId });
         if (!item) {
             return res.status(404).json({ error: 'Product not found' });
         }
-        let client = await Client.findById(item.clientId);
+        let client = await Client.findOne({ clientId: item.clientId });
         if (!client) {
             return res.status(404).json({ error: 'Client not found' });
         }
@@ -30,7 +30,7 @@ export const addItem = async (req, res) => {
             email: client.email,
         });
         const savedItem = await item1.save();
-        const updatedDelivery = await Delivery.findByIdAndUpdate(itemId, {
+        const updatedDelivery = await Delivery.findOneAndUpdate({ itemId: itemId }, {
             $set: {
                 status: "Received",
                 cashierOut: staffId,
@@ -43,7 +43,7 @@ export const addItem = async (req, res) => {
                 message: 'Item not found',
             });
         }
-        const deletedItem = await Pack.findByIdAndDelete(itemId);
+        const deletedItem = await Pack.findOneAndDelete({ itemId: itemId });
         if (!deletedItem) {
             return res.status(404).json({
                 success: false,
@@ -104,7 +104,7 @@ export const getItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const { itemId } = req.body;
-        const deletedItem = await Received.findByIdAndDelete(itemId);
+        const deletedItem = await Received.findOneAndDelete({ itemId: itemId });
         if (!deletedItem) {
             return res.status(404).json({
                 success: false,
@@ -136,7 +136,7 @@ export const updateItem = async (req, res) => {
         const { itemId, item, status, clientId, name, address, contact, email } = req.body;
         const staffId = req.user?.staffId;
         // Find the item by its ID
-        const updatedReceiveditem = await Received.findByIdAndUpdate(itemId, {
+        const updatedReceiveditem = await Received.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
@@ -152,7 +152,7 @@ export const updateItem = async (req, res) => {
                 message: 'Item not found',
             });
         }
-        const updatedDeliveryitem = await Delivery.findByIdAndUpdate(itemId, {
+        const updatedDeliveryitem = await Delivery.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
@@ -190,8 +190,8 @@ export const checkout = async (req, res) => {
     try {
         const { itemId } = req.body;
         const staffId = req.user?.staffId;
-        await Received.findByIdAndDelete(itemId);
-        const updateditem = await Delivery.findByIdAndUpdate(itemId, {
+        await Received.findOneAndDelete({ itemId: itemId });
+        const updateditem = await Delivery.findOneAndUpdate({ itemId: itemId }, {
             status: "Delivered",
             cashierOut: staffId,
         }, { new: true } // Return the updated item

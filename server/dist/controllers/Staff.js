@@ -1,4 +1,4 @@
-import Staff from '../models/Staff';
+import Staff from '../models/Staff.js';
 import bcrypt from 'bcrypt';
 // Function to generate a random password
 function generateRandomPassword() {
@@ -88,7 +88,7 @@ export const getStaff = async (req, res) => {
 export const deleteStaff = async (req, res) => {
     try {
         const { staffId } = req.body;
-        const deletedStaff = await Staff.findByIdAndDelete(staffId);
+        const deletedStaff = await Staff.findOneAndDelete({ staffId: staffId });
         if (!deletedStaff) {
             return res.status(404).json({
                 success: false,
@@ -119,7 +119,7 @@ export const updateStaff = async (req, res) => {
     try {
         const { staffId, name, branch, sex, role, dob, contact, address, email } = req.body;
         // Find the product by its ID and update the amount field
-        const updatedstaff = await Staff.findByIdAndUpdate(staffId, {
+        const updatedstaff = await Staff.findOneAndUpdate({ staffId: staffId }, {
             name: name,
             address: address,
             contact: contact,

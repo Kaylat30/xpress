@@ -1,7 +1,7 @@
-import Delivery from "../models/Delivery";
-import Pack from "../models/Pack";
-import Received from "../models/Received";
-import Staged from "../models/Staged";
+import Delivery from "../models/Delivery.js";
+import Pack from "../models/Pack.js";
+import Received from "../models/Received.js";
+import Staged from "../models/Staged.js";
 //get Staff
 export const getDelivery = async (req, res) => {
     try {
@@ -33,16 +33,16 @@ export const getDelivery = async (req, res) => {
 export const deleteDelivery = async (req, res) => {
     try {
         const { itemId } = req.body;
-        const deletedDeliveryItem = await Delivery.findByIdAndDelete(itemId);
-        const deletedStagedItem = await Staged.findByIdAndDelete(itemId);
-        const deletedPackItem = await Pack.findByIdAndDelete(itemId);
-        const deletedReceivedItem = await Received.findByIdAndDelete(itemId);
+        const deletedDeliveryItem = await Delivery.findOneAndDelete({ itemId: itemId });
+        const deletedStagedItem = await Staged.findOneAndDelete({ itemId: itemId });
+        const deletedPackItem = await Pack.findOneAndDelete({ itemId: itemId });
+        const deletedReceivedItem = await Received.findOneAndDelete({ itemId: itemId });
         if (!deletedDeliveryItem || !deletedStagedItem || !deletedPackItem || !deletedReceivedItem) {
-            // return res.status(404).json({
-            //   success: false,
-            //   message: 'Item not found',
-            // });
-            console.log("item not found");
+            return res.status(404).json({
+                success: false,
+                message: 'Item not found',
+            });
+            //console.log("item not found")
         }
         return res.status(200).json({
             success: true,
@@ -68,7 +68,7 @@ export const updateDelivery = async (req, res) => {
     try {
         const { itemId, item, status, clientId, driverId, cashierIn, cashierOut } = req.body;
         // Find the item by its ID 
-        const updatedDeliveryItem = await Delivery.findByIdAndUpdate(itemId, {
+        const updatedDeliveryItem = await Delivery.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
@@ -77,29 +77,29 @@ export const updateDelivery = async (req, res) => {
             cashierOut: cashierOut
         }, { new: true } // Return the updated item
         );
-        const updatedStagedItem = await Staged.findByIdAndUpdate(itemId, {
+        const updatedStagedItem = await Staged.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
         }, { new: true } // Return the updated item
         );
-        const updatedPackItem = await Pack.findByIdAndUpdate(itemId, {
+        const updatedPackItem = await Pack.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
         }, { new: true } // Return the updated item
         );
-        const updatedReceivedItem = await Received.findByIdAndUpdate(itemId, {
+        const updatedReceivedItem = await Received.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
         }, { new: true } // Return the updated item
         );
         if (!updatedDeliveryItem || !updatedStagedItem || !updatedPackItem || !updatedReceivedItem) {
-            // return res.status(404).json({
-            //   success: false,
-            //   message: 'Item not found',
-            // });
-            console.log("item not found");
+            return res.status(404).json({
+                success: false,
+                message: 'Item not found',
+            });
+            //console.log("item not found");
         }
         return res.status(200).json({
             success: true,

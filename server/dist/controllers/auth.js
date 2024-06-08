@@ -12,12 +12,12 @@ export const login = (req, res, next) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            const { password, ...user1 } = user.toObject();
-            res.cookie('name', JSON.stringify({ firstname: user1.name }), {
-                maxAge: 60000,
-                // secure: true,
-            });
-            res.status(200).json({ success: true, message: 'Logged in successfully' });
+            // const { password, ...user1 } = user.toObject();
+            // res.cookie('name', JSON.stringify({ firstname: user1.name }), {
+            //   maxAge: 60000,
+            //   // secure: true,
+            // });
+            res.status(200).json({ success: true, message: 'Logged in successfully', firstname: user.name, role: user.role });
         });
     })(req, res, next);
 };

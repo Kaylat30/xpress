@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addClient, getClients, deleteClient, updateClient } from '../api'; 
+import { addClient, getClients, deleteClient, updateClient, getClientInfo } from '../api';
 
 interface Client {
   clientId: string;
@@ -47,6 +47,22 @@ export const getClientsAsync = createAsyncThunk<Client[], void, { rejectValue: {
       }
     }
     return [];
+  }
+);
+
+export const getClientInfoAsync = createAsyncThunk<Client, string, { rejectValue: { message: string } }>(
+  'clients/getClientInfo',
+  async (clientId, { rejectWithValue }) => {
+    try {
+      const data = await getClientInfo(clientId);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error fetching blog details:', error.message);
+        throw rejectWithValue({ message: error.message });
+      }
+      throw rejectWithValue({ message: 'An error occurred while fetching blog details' });
+    }
   }
 );
 
@@ -113,6 +129,19 @@ const clientSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error'; // Set error message
       })
+      .addCase(getClientInfoAsync.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear error on pending
+      })
+      .addCase(getClientInfoAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.clients = [action.payload]; // Update single client in array
+        state.error = null; // Clear error on success
+      })
+      .addCase(getClientInfoAsync.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message ?? 'Unknown error'; // Set error message
+      })
       .addCase(deleteClientAsync.pending, (state) => {
         state.status = 'loading';
         state.error = null; // Clear error on pending
@@ -149,8 +178,10 @@ export const { clearClients } = clientSlice.actions;
 
 // Selector functions
 export const selectClients = (state: { clients: ClientState }) => state.clients.clients;
-export const selectClientById = (clientId: string) => (state: { clients: ClientState }) =>
-  state.clients.clients.find(client => client.clientId === clientId);
+export const selectClient = (state: { clients: ClientState }) => state.clients.clients[0]; // assuming you want to select the first client
+export const selectClientById = (clientId: string) => (state: { clients: ClientState }): Client | undefined => {
+  return state.clients.clients.find(client => client.clientId === clientId);
+};
 export const selectStatus = (state: { clients: ClientState }) => state.clients.status;
 export const selectError = (state: { clients: ClientState }) => state.clients.error;
 

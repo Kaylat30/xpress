@@ -14,7 +14,7 @@ import LayoutCashier from "./components/LayoutCashier";
 import LayoutDriver from "./components/LayoutDriver";
 import DashboardDriver from "./pages/DashboardDriver";
 import DashboardCashier from "./pages/DashboardCashier";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
+import ProtectedRoute from "./components/ProtectedRoute"; 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectSessionExpiresAt } from './slice/userSlice';

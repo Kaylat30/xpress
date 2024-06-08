@@ -11,11 +11,15 @@ import MongoDBStore from 'connect-mongodb-session';
 import { login,logout } from "./routes/auth.js";
 import { addStaff, getStaff,deleteStaff, updateStaff } from "./routes/staff.js";
 import { deleteDelivery, getDelivery, updateDelivery } from "./routes/delivery.js";
-import { addClient, getClient,deleteClient, updateClient } from "./routes/client.js";
+import { deleteClient, updateClient,  addClient, getClient,getClientInfo } from "./routes/client.js";
 import { getPack,updatePack } from "./routes/pack.js";
 import {addItem, getItem, deleteItem, updateItem, checkout} from "./routes/received.js";
 import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem} from "./routes/staged.js";
-const url = 'http://localhost:5173'
+
+
+
+//const url = 'http://localhost:5173'
+const url = "http://127.0.0.1:5173"
 //const url = 'https://heinreach.vercel.app'
 
 const  app = express()
@@ -104,5 +108,6 @@ app.use("/deleteDelivery",deleteDelivery)
 app.use("/updateDelivery",updateDelivery)
 app.use("/addClient",addClient)
 app.use("/getClient",getClient)
+app.use("/getClientInfo", getClientInfo)
 app.use("/deleteClient",deleteClient)
 app.use("/updateClient",updateClient)

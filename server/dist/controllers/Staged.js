@@ -1,9 +1,9 @@
-import Delivery from "../models/Delivery";
-import Staged from "../models/Staged";
-import Client from "../models/Client";
-import Pack from "../models/Pack";
+import Delivery from "../models/Delivery.js";
+import Staged from "../models/Staged.js";
+import Client from "../models/Client.js";
+import Pack from "../models/Pack.js";
 //add Item
-export const addItem = async (req, res) => {
+export const addStagedItem = async (req, res) => {
     try {
         const { item, name, address, contact, email } = req.body;
         //const sessionID = req.sessionID;
@@ -13,8 +13,8 @@ export const addItem = async (req, res) => {
         const currentYear = new Date().getFullYear();
         const clientCount = await Client.countDocuments();
         const clientId = `${currentYear}/CL/${(clientCount + 1).toString().padStart(3, '0')}`;
-        // Generate itemId 
-        const itemCount = await Delivery.countDocuments();
+        // Generate itemId  
+        const itemCount = await Staged.countDocuments();
         const itemId = `${currentYear}/DI/${(itemCount + 1).toString().padStart(3, '0')}`;
         let addToStaged = new Staged({
             itemId: itemId,
@@ -26,6 +26,7 @@ export const addItem = async (req, res) => {
             contact: contact,
             email: email,
             user: staffId,
+            branch: branch
             // session:sessionID
         });
         const savedToStaged = await addToStaged.save();
@@ -50,14 +51,14 @@ export const addItem = async (req, res) => {
         });
         const savedToDelivery = await addToDelivery.save();
         let addToPack = new Pack({
-            itemId: itemId,
+            ItemId: itemId,
             item: item,
             status: "Pending",
             pickup: branch,
             dropoff: address
         });
         const savedToPack = await addToPack.save();
-        return res.status(201).json({ Staged: savedToStaged, Client: savedToClient, Delievery: savedToDelivery, pack: savedToPack });
+        return res.status(201).json({ Staged: savedToStaged, Client: savedToClient, pack: savedToPack, Delivery: savedToDelivery });
     }
     catch (error) {
         if (error instanceof Error) {
@@ -74,7 +75,7 @@ export const addItem = async (req, res) => {
     }
 };
 //get item
-export const getItem = async (req, res) => {
+export const getStagedItem = async (req, res) => {
     try {
         const query = { branch: req.user?.branch };
         if (!query.branch) {
@@ -83,7 +84,7 @@ export const getItem = async (req, res) => {
                 message: 'Item not found',
             });
         }
-        const stagedItems = await Staged.find(query);
+        const stagedItems = await Staged.find();
         if (stagedItems.length < 1) {
             return res.status(200).json({
                 success: true,
@@ -108,14 +109,14 @@ export const getItem = async (req, res) => {
     }
 };
 //delete item
-export const deleteItem = async (req, res) => {
+export const deleteStagedItem = async (req, res) => {
     try {
         const { itemId, clientId } = req.body;
-        const deletedStagedItem = await Staged.findByIdAndDelete(itemId);
-        const deletedDeliveryItem = await Delivery.findByIdAndDelete(itemId);
-        const deletedPackItem = await Pack.findByIdAndDelete(itemId);
-        const deletedClientItem = await Client.findByIdAndDelete(clientId);
-        if (!deletedStagedItem || !deletedDeliveryItem || !deletedClientItem || !deletedPackItem) {
+        const deletedStagedItem = await Staged.findOneAndDelete({ itemId: itemId });
+        const deletedDeliveryItem = await Delivery.findOneAndDelete({ itemId: itemId });
+        const deletedPackItem = await Pack.findOneAndDelete({ itemId: itemId });
+        const deletedClientItem = await Client.findOneAndDelete({ clientId: clientId });
+        if (!deletedStagedItem || !deletedClientItem || !deletedPackItem || deletedDeliveryItem) {
             return res.status(404).json({
                 success: false,
                 message: 'Item not found',
@@ -141,13 +142,13 @@ export const deleteItem = async (req, res) => {
     }
 };
 //Updating item
-export const updateItem = async (req, res) => {
+export const updateStagedItem = async (req, res) => {
     try {
         const { itemId, item, status, clientId, name, address, contact, email } = req.body;
-        const staffId = req.user?.staffId;
+        const staffId = req.user?._id;
         const branch = req.user?.branch;
         // Find the item by its ID
-        const updatedStageditem = await Staged.findByIdAndUpdate(itemId, {
+        const updatedStageditem = await Staged.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: status,
             clientId: clientId,
@@ -158,28 +159,28 @@ export const updateItem = async (req, res) => {
             user: staffId,
         }, { new: true } // Return the updated item
         );
-        const updatedClientitem = await Client.findByIdAndUpdate(clientId, {
+        const updatedClientitem = await Client.findOneAndUpdate({ itemId: itemId }, {
             name: name,
             address: address,
             contact: contact,
             email: email,
         }, { new: true } // Return the updated item
         );
-        const updatedPackitem = await Pack.findByIdAndUpdate(itemId, {
+        const updatedPackitem = await Pack.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: "Pending",
             pickup: branch,
             dropoff: address
         }, { new: true } // Return the updated item
         );
-        const updatedDeliveryitem = await Delivery.findByIdAndUpdate(itemId, {
+        const updatedDeliveryitem = await Delivery.findOneAndUpdate({ itemId: itemId }, {
             item: item,
             status: "Pending",
             clientId: clientId,
             cashierIn: staffId,
         }, { new: true } // Return the updated item
         );
-        if (!updatedDeliveryitem || !updatedStageditem || !updatedClientitem || !updatedPackitem) {
+        if (!updatedStageditem || !updatedClientitem || !updatedPackitem || updatedDeliveryitem) {
             return res.status(404).json({
                 success: false,
                 message: 'Item not found',

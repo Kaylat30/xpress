@@ -5,7 +5,7 @@ const packSchema = new Schema({
         min: 2,
         max: 50,
     },
-    ItemId: {
+    itemId: {
         type: String,
         required: true,
         min: 2,

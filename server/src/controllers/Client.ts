@@ -72,6 +72,28 @@ export const getClient = async (req: Request, res: Response) => {
     }
 };
 
+//get ClientIfo
+export const getClientInfo = async (req: Request, res: Response) =>
+  {
+      try {
+          const {clientId} = req.body
+          const client = await Client.findOne({ clientId: clientId })
+          return res.status(200).json(client)
+      } catch (error) {
+          if (error instanceof Error) {
+              return res.status(500).json({
+                  success: false,
+                  error: error.message,
+              });
+          }
+          // Handle other cases where 'error' is not of type 'Error'
+          return res.status(500).json({
+              success: false,
+              error: 'An unexpected error occurred',
+          });
+      }
+  }
+
 //delete Client
 export const deleteClient = async (req: Request, res: Response) => {
     try {
