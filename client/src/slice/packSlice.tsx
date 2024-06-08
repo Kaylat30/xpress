@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getPackItems, approvePackItem } from '../api'; 
 interface PackItem {
-  itemId: string;
-  itemName: string;
-  status: string;
+  DriverId?: string;
+    itemId: string;
+    item: string;
+    pickup: string;
+    dropoff: string;
+    status: string;
 }
 
 interface PackState {

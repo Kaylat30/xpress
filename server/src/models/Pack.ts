@@ -2,7 +2,7 @@ import { Document, model, Schema } from 'mongoose';
 
 interface PackDocument extends Document {
     DriverId?: string;
-    ItemId: string;
+    itemId: string;
     item: string;
     pickup: string;
     dropoff: string;
