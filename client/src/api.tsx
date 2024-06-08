@@ -167,6 +167,28 @@ export const url: string = "http://localhost:3000";
         }
     }
   };
+
+  export const getDeliveryInfo = async (itemId:string) => {
+    try {
+      const response = await fetch(`${url}/getDeliveryInfo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ itemId }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      return response.json();
+    } catch (error) {
+        if (error instanceof Error) {
+            return { success: false, error: error.message };
+        }
+    }
+  };
   
   export const deleteDeliveryItem = async (itemId: string) => {
     try {

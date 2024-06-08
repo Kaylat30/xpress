@@ -10,7 +10,7 @@ import session from 'express-session';
 import MongoDBStore from 'connect-mongodb-session';
 import { login,logout } from "./routes/auth.js";
 import { addStaff, getStaff,deleteStaff, updateStaff } from "./routes/staff.js";
-import { deleteDelivery, getDelivery, updateDelivery } from "./routes/delivery.js";
+import { deleteDelivery, getDelivery, getDeliveryInfo, updateDelivery } from "./routes/delivery.js";
 import { deleteClient, updateClient,  addClient, getClient,getClientInfo } from "./routes/client.js";
 import { getPack,updatePack } from "./routes/pack.js";
 import {addItem, getItem, deleteItem, updateItem, checkout} from "./routes/received.js";
@@ -59,7 +59,7 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie:{
-        maxAge: 300000, 
+        maxAge: 21600000, 
         httpOnly: true,
         //secure:true,   
         //sameSite: 'none'  
@@ -104,6 +104,7 @@ app.use("/updateStagedItem",updateStagedItem)
 app.use("/getPack",getPack)
 app.use("/updatePack",updatePack)
 app.use("/getDelivery",getDelivery)
+app.use("/getDeliveryInfo",getDeliveryInfo)
 app.use("/deleteDelivery",deleteDelivery)
 app.use("/updateDelivery",updateDelivery)
 app.use("/addClient",addClient)

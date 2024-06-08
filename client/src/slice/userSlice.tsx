@@ -87,7 +87,7 @@ const userSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload;
         state.error = null; // Clear error on success
-        const sessionDuration = 300000 
+        const sessionDuration = 21600000
         const sessionExpiresAt = Date.now() + sessionDuration;
         state.sessionExpiresAt = sessionExpiresAt;
         localStorage.setItem('user', JSON.stringify(action.payload));

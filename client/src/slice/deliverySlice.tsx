@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDeliveryItems, deleteDeliveryItem, updateDeliveryItem } from '../api'; 
+import { getDeliveryItems, deleteDeliveryItem, updateDeliveryItem, getDeliveryInfo } from '../api'; 
 
 interface DeliveryItem {
   itemId: string;
@@ -9,6 +9,7 @@ interface DeliveryItem {
   driverId: string;
   cashierIn: string;
   cashierOut: string;
+  
 }
 
 interface DeliveryState {
@@ -35,6 +36,22 @@ export const getDeliveryItemsAsync = createAsyncThunk<DeliveryItem[], void, { re
       }
     }
     return [];
+  }
+);
+
+export const getDeliveryInfoAsync = createAsyncThunk<DeliveryItem , string, { rejectValue: { message: string } }>(
+  'delivery/getDeliveryInfo',
+  async (itemId, { rejectWithValue }) => {
+    try {
+      const data = await getDeliveryInfo(itemId);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error fetching delivery details:', error.message);
+        throw rejectWithValue({ message: error.message });
+      }
+      throw rejectWithValue({ message: 'An error occurred while fetching blog details' });
+    }
   }
 );
 
@@ -88,6 +105,19 @@ const deliverySlice = createSlice({
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error'; // Set error message
       })
+      .addCase(getDeliveryInfoAsync.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear error on pending
+      })
+      .addCase(getDeliveryInfoAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.deliveryItems = [action.payload]; // Update single client in array
+        state.error = null; // Clear error on success
+      })
+      .addCase(getDeliveryInfoAsync.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message ?? 'Unknown error'; // Set error message
+      })
       .addCase(deleteDeliveryItemAsync.pending, (state) => {
         state.status = 'loading';
         state.error = null; // Clear error on pending
@@ -124,6 +154,10 @@ export const { clearDeliveryItems } = deliverySlice.actions;
 
 // Selector functions
 export const selectDeliveryItems = (state: { delivery: DeliveryState }) => state.delivery.deliveryItems;
+export const selectDeliveryItem = (state: { delivery: DeliveryState }) => state.delivery.deliveryItems[0];
+export const selectDeliveryById = (itemId: string) => (state: { delivery: DeliveryState }): DeliveryItem | undefined => {
+  return state.delivery.deliveryItems.find(delivery => delivery.itemId === itemId);
+};
 export const selectStatus = (state: { delivery: DeliveryState }) => state.delivery.status;
 export const selectError = (state: { delivery: DeliveryState }) => state.delivery.error;
 

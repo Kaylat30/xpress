@@ -178,7 +178,7 @@ export const { clearClients } = clientSlice.actions;
 
 // Selector functions
 export const selectClients = (state: { clients: ClientState }) => state.clients.clients;
-export const selectClient = (state: { clients: ClientState }) => state.clients.clients[0]; // assuming you want to select the first client
+export const selectClient = (state: { clients: ClientState }) => state.clients.clients[0]; 
 export const selectClientById = (clientId: string) => (state: { clients: ClientState }): Client | undefined => {
   return state.clients.clients.find(client => client.clientId === clientId);
 };

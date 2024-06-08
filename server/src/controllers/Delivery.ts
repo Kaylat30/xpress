@@ -4,7 +4,7 @@ import Received from "../models/Received.js";
 import Staged from "../models/Staged.js";
 import { Request, Response } from 'express';
 
-//get Staff
+//get Delivery
 export const getDelivery = async (req: Request, res: Response) => {
     try {
    
@@ -33,7 +33,29 @@ export const getDelivery = async (req: Request, res: Response) => {
         error: 'An unexpected error occurred',
       });
     }
-};
+}; 
+
+//get deliveryIfo
+export const getDeliveryInfo = async (req: Request, res: Response) =>
+  {
+      try {
+          const {itemId} = req.body
+          const delivery = await Delivery.findOne({ itemId: itemId })
+          return res.status(200).json(delivery)
+      } catch (error) {
+          if (error instanceof Error) {
+              return res.status(500).json({
+                  success: false,
+                  error: error.message,
+              });
+          }
+          // Handle other cases where 'error' is not of type 'Error'
+          return res.status(500).json({
+              success: false,
+              error: 'An unexpected error occurred',
+          });
+      }
+  }
 
 //delete delivery
 export const deleteDelivery = async (req: Request, res: Response) => {
