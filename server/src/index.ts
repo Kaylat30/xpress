@@ -9,7 +9,7 @@ import { initializePassport } from "./middleware/passport.js";
 import session from 'express-session';
 import MongoDBStore from 'connect-mongodb-session';
 import { login,logout } from "./routes/auth.js";
-import { addStaff, getStaff,deleteStaff, updateStaff } from "./routes/staff.js";
+import { addStaff, getStaff,deleteStaff, updateStaff,getStaffInfo } from "./routes/staff.js";
 import { deleteDelivery, getDelivery, getDeliveryInfo, updateDelivery } from "./routes/delivery.js";
 import { deleteClient, updateClient,  addClient, getClient,getClientInfo } from "./routes/client.js";
 import { getPack,updatePack } from "./routes/pack.js";
@@ -90,6 +90,7 @@ app.use("/login",login)
 app.use("/logout",logout)
 app.use("/addStaff",addStaff)
 app.use("/getStaff",getStaff)
+app.use("/getStaffInfo",getStaffInfo)
 app.use("/deleteStaff",deleteStaff)
 app.use("/updateStaff",updateStaff)
 app.use("/checkout",checkout)

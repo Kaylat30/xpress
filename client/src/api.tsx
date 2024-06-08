@@ -441,6 +441,28 @@ export const getStaff = async () => {
     }
 };
 
+export const getStaffInfo = async (staffId:string) => {
+  try {
+    const response = await fetch(`${url}/getStaffInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ staffId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+      if (error instanceof Error) {
+          return { success: false, error: error.message };
+      }
+  }
+};
+
 export const deleteStaff = async (staffId: string) => {
   try {
     const response = await fetch(`${url}/deleteStaff`, {

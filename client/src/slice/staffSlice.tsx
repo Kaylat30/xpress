@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addStaff, getStaff, deleteStaff, updateStaff } from '../api'; // Adjust the path to your API functions
+import { addStaff, getStaff, deleteStaff, updateStaff, getStaffInfo } from '../api'; // Adjust the path to your API functions
 
 interface Staff {
   staffId: string;
@@ -60,6 +60,22 @@ export const getStaffAsync = createAsyncThunk<Staff[], void, { rejectValue: { me
       }
     }
     return [];
+  }
+);
+
+export const getStaffInfoAsync = createAsyncThunk<Staff, string, { rejectValue: { message: string } }>(
+  'staff/getStaffInfo',
+  async (staffId, { rejectWithValue }) => {
+    try {
+      const data = await getStaffInfo(staffId);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error fetching staff details:', error.message);
+        throw rejectWithValue({ message: error.message });
+      }
+      throw rejectWithValue({ message: 'An error occurred while fetching blog details' });
+    }
   }
 );
 
@@ -137,6 +153,19 @@ const staffSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error';
       })
+      .addCase(getStaffInfoAsync.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear error on pending
+      })
+      .addCase(getStaffInfoAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.staff = [action.payload]; // Update single client in array
+        state.error = null; // Clear error on success
+      })
+      .addCase(getStaffInfoAsync.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message ?? 'Unknown error'; // Set error message
+      })
       .addCase(deleteStaffAsync.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -172,7 +201,11 @@ const staffSlice = createSlice({
 export const { clearStaff } = staffSlice.actions;
 
 // Selector functions
-export const selectStaff = (state: { staff: StaffState }) => state.staff.staff;
+export const selectStaffs = (state: { staff: StaffState }) => state.staff.staff;
+export const selectStaff = (state: { staff: StaffState }) => state.staff.staff[0]; 
+export const selectStaffById = (staffId: string) => (state: { staff: StaffState }): Staff | undefined => {
+  return state.staff.staff.find(staf => staf.staffId === staffId);
+};
 export const selectStaffStatus = (state: { staff: StaffState }) => state.staff.status;
 export const selectStaffError = (state: { staff: StaffState }) => state.staff.error;
 
