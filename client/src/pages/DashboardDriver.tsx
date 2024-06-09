@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form } from "react-router-dom"
 import { AppDispatch } from "../store";
 import { useEffect, useState } from "react";
-import { approvePackItemAsync, getPackItemsAsync, selectPackItems,selectStatus } from "../slice/packSlice";
+import { approvePackItemAsync, getPackItemsAsync, selectPackItems } from "../slice/packSlice";
 
 interface PackItem {
   DriverId?: string;
@@ -19,7 +19,7 @@ export default function DashboardDriver() {
 
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
-  const status = useSelector(selectStatus)
+  //const status = useSelector(selectStatus)
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
@@ -68,10 +68,12 @@ export default function DashboardDriver() {
                 className="shadow-xl w-20 md:w-40 rounded-md m-2 p-2 z-0"
               >
                 <option value="">Select</option>
-                <option value="id">Id</option>
-                <option value="name">Name</option>
-                <option value="branch">Branch</option>
-                <option value="role">Role</option>
+                <option value="itemId">Item Id</option>
+                <option value="item">Name</option>
+                <option value="pickup">Pick up</option>
+                <option value="dropoff">Drop off</option>
+                <option value="status">Status</option>
+                <option value="driverId">Driver id</option>
               </select>
               <input type="text" name="" placeholder="search" className="bg-gray-200 rounded-2xl p-1 pl-3 w-28 sm:w-auto text-xl" onChange={(e) => setSearch(e.target.value)} />
               <button className="absolute z-0 top-4 right-3 text-xl"> <IoSearchSharp/></button>              
