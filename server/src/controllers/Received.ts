@@ -139,6 +139,28 @@ export const getItem = async (req: Request, res: Response) => {
     }
 };
 
+//get ClientIfo
+export const getItemInfo = async (req: Request, res: Response) =>
+  {
+      try {
+          const {itemId} = req.body
+          const receivedItems = await Received.findOne({ itemId: itemId})
+          return res.status(200).json(receivedItems)
+      } catch (error) {
+          if (error instanceof Error) {
+              return res.status(500).json({
+                  success: false,
+                  error: error.message,
+              });
+          }
+          // Handle other cases where 'error' is not of type 'Error'
+          return res.status(500).json({
+              success: false,
+              error: 'An unexpected error occurred',
+          });
+      }
+  }
+
 //delete item
 export const deleteItem = async (req: Request, res: Response) => {
     try {
@@ -244,17 +266,18 @@ export const deleteItem = async (req: Request, res: Response) => {
   export const checkout = async (req: Request, res: Response) => {
     try {
         
-        const { itemId } = req.body;
+        const { itemId ,price} = req.body;
         const staffId = (req.user as { staffId?: string })?.staffId;
 
         await Received.findOneAndDelete({itemId:itemId});
 
         const updateditem = await Delivery.findOneAndUpdate(
             {itemId:itemId},
-            {   
+            {$set:{   
                 status:"Delivered",
                 cashierOut: staffId,
-             },
+                price:price
+             }},
             { new: true } // Return the updated item
           )
       

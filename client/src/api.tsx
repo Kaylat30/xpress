@@ -318,6 +318,28 @@ export const getItem = async ()=> {
     }
 };
 
+export const getItemInfo = async (itemId:string) => {
+  try {
+    const response = await fetch(`${url}/getItemInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ itemId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+      if (error instanceof Error) {
+          return { success: false, error: error.message };
+      }
+  }
+};
+
 export const deleteItem = async (itemId: string)=> {
   try {
     const response = await fetch(`${url}/deleteItem`, {
@@ -371,14 +393,14 @@ export const updateItem = async (
     }
 };
 
-export const checkout = async (itemId: string) => {
+export const checkout = async (itemId: string,price:number) => {
   try {
     const response = await fetch(`${url}/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ itemId }),
+      body: JSON.stringify({ itemId,price }),
     });
 
     if (!response.ok) {
@@ -564,6 +586,28 @@ export const getStagedItems = async ()=> {
             return { success: false, error: error.message };
         }
     }
+};
+
+export const getStagedItemInfo = async (itemId:string) => {
+  try {
+    const response = await fetch(`${url}/getStagedItemInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ itemId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+      if (error instanceof Error) {
+          return { success: false, error: error.message };
+      }
+  }
 };
 
 export const deleteStagedItem = async (

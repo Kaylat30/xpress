@@ -1,5 +1,12 @@
 import { IoAnalytics, IoArrowUpSharp,IoArrowDownSharp, IoWalletSharp, IoCashSharp } from "react-icons/io5";
-import { useSelector} from "react-redux";
+import { useEffect, } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store";
+import {  getDeliveryItemsAsync, selectDeliveryItems, } from "../slice/deliverySlice";
+import { getClientsAsync, } from "../slice/clientSlice";
+import { getStaffAsync, } from "../slice/staffSlice";
+import { Link } from "react-router-dom";
+
 
 export default function Analysis() {
 
@@ -46,19 +53,7 @@ export default function Analysis() {
   };
   const {isActive} = useSelector((store:RootState)=>store.active)
 
-  const data = [
-    { id: 1, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" },
-    { id: 2, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Pending" },
-    { id: 3, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Return" },
-    { id: 4, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" },  
-    { id: 5, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" },
-    { id: 6, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" },
-    // { id: 7, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Pending" },
-    // { id: 8, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Return" },
-    // { id: 9, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" },
-    // { id: 10, name: 'John Doe', email: 'john@example.com',price:1200,payment:"Paid",Status:"Delivered" }
-    
-  ];
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -72,6 +67,17 @@ export default function Analysis() {
         return "bg-gray-200";
     }
   };
+
+  const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+      dispatch(getDeliveryItemsAsync());
+      dispatch(getClientsAsync())
+      dispatch(getStaffAsync())
+    }, [dispatch]);
+
+    //const clients = useSelector(selectClients)
+    //const staffs = useSelector(selectStaffs)
+    const deliveries = useSelector(selectDeliveryItems)
   
   return (
     <div>
@@ -155,25 +161,29 @@ export default function Analysis() {
           <div className="bg-white shadow-xl rounded-md w-auto mx-2 flex-grow">
                   <div className="flex justify-between p-2">
                       <h1 className="text-brightBlue sm:text-2xl text-lg">Recent Orders</h1>
-                      <button className="bg-brightBlue text-white rounded-md sm:p-2 px-1">View All</button>
+                      <Link to="deliveries" className="bg-brightBlue text-white rounded-md sm:p-2 px-1">View All</Link>
                   </div>
                   <div className="overflow-x-auto">
                       <table className="min-w-full bg-white">
                           <thead>
                           <tr>
                               <th className="py-2 px-4">Name</th>
-                              <th className="py-2 px-4">Price</th>
-                              <th className="py-2 px-4">Payment</th>
+                              <th className="py-2 px-4">Item Id</th>
+                              <th className="py-2 px-4">Item</th>
+                              <th className="py-2 px-4">Client Id</th>
+                              <th className="py-2 px-4">Cashier Out</th>
                               <th className="py-2 px-4">Status</th>
                           </tr>
                           </thead>
                           <tbody >
-                          {data.map((item) => (
-                              <tr key={item.id} className="my-2">
-                              <td className="py-4 px-4 border-b">{item.name}</td>
-                              <td className="py-4 px-4 border-b">${item.price}</td>
-                              <td className="py-4 px-4 border-b">{item.payment}</td>
-                              <td className="py-4 px-4 border-b"><span className={`${getStatusColor(item.Status)} text-white p-1 rounded-md`}>{item.Status}</span></td>
+                          {Array.isArray(deliveries) &&
+                              deliveries.slice(-10).map((item) => (
+                              <tr key={item.itemId} className="my-2">
+                              <td className="py-4 px-4 border-b">{item.itemId}</td>    
+                              <td className="py-4 px-4 border-b">{item.item}</td>
+                              <td className="py-4 px-4 border-b">{item.clientId}</td>
+                              <td className="py-4 px-4 border-b">{item.cashierOut}</td>
+                              <td className="py-4 px-4 border-b"><span className={`${getStatusColor(item.status)} text-white p-1 rounded-md`}>{item.status}</span></td>
                               </tr>
                           ))}
                           </tbody>

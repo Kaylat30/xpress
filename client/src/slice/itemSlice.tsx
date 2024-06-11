@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addItem, getItem, deleteItem, updateItem, checkout } from '../api'; // Adjust the path to your API functions
+import { addItem, getItem, deleteItem, updateItem, checkout, getItemInfo } from '../api'; // Adjust the path to your API functions
 
 interface Item {
   itemId: string;
-  itemName: string;
+  item: string;
   status: string;
   clientId: string;
   name: string;
@@ -53,6 +53,22 @@ export const getItemAsync = createAsyncThunk<Item[], void, { rejectValue: { mess
   }
 );
 
+export const getItemInfoAsync = createAsyncThunk<Item, string, { rejectValue: { message: string } }>(
+  'item/getItemInfo',
+  async (itemId, { rejectWithValue }) => {
+    try {
+      const data = await getItemInfo(itemId);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error fetching Item details:', error.message);
+        throw rejectWithValue({ message: error.message });
+      }
+      throw rejectWithValue({ message: 'An error occurred while fetching item details' });
+    }
+  }
+);
+
 export const deleteItemAsync = createAsyncThunk<void, string, { rejectValue: { message: string } }>(
   'item/deleteItem',
   async (itemId, { rejectWithValue }) => {
@@ -71,7 +87,7 @@ export const updateItemAsync = createAsyncThunk<Item, Item, { rejectValue: { mes
   'item/updateItem',
   async (item, { rejectWithValue }) => {
     try {
-      const data = await updateItem(item.itemId, item.itemName, item.status, item.clientId, item.name, item.address, item.contact, item.email);
+      const data = await updateItem(item.itemId, item.item, item.status, item.clientId, item.name, item.address, item.contact, item.email);
       return data;
     } catch (error) {
       if (error instanceof Error) {
@@ -81,11 +97,11 @@ export const updateItemAsync = createAsyncThunk<Item, Item, { rejectValue: { mes
   }
 );
 
-export const checkoutItemAsync = createAsyncThunk<Item, string, { rejectValue: { message: string } }>(
+export const checkoutItemAsync = createAsyncThunk<string,{itemId:string,price:number} ,{ rejectValue: { message: string } }>(
   'item/checkoutItem',
-  async (itemId, { rejectWithValue }) => {
+  async (args, { rejectWithValue }) => {
     try {
-      const data = await checkout(itemId);
+      const data = await checkout(args.itemId,args.price);
       return data;
     } catch (error) {
       if (error instanceof Error) {
@@ -130,6 +146,19 @@ const itemSlice = createSlice({
       .addCase(getItemAsync.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error';
+      })
+      .addCase(getItemInfoAsync.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear error on pending
+      })
+      .addCase(getItemInfoAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.items = [action.payload]; 
+        state.error = null; // Clear error on success
+      })
+      .addCase(getItemInfoAsync.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message ?? 'Unknown error'; // Set error message
       })
       .addCase(deleteItemAsync.pending, (state) => {
         state.status = 'loading';
@@ -183,6 +212,10 @@ export const { clearItems } = itemSlice.actions;
 
 // Selector functions
 export const selectItems = (state: { item: ItemState }) => state.item.items;
+export const selectItem = (state: { item: ItemState }) => state.item.items[0]; 
+export const selectItemById = (itemId: string) => (state: { item: ItemState }): Item | undefined => {
+  return state.item.items.find(item => item.itemId === itemId);
+};
 export const selectStatus = (state: { item: ItemState }) => state.item.status;
 export const selectError = (state: { item: ItemState }) => state.item.error;
 

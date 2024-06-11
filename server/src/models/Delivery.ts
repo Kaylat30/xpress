@@ -8,6 +8,7 @@ interface DeliveryDocument extends Document {
     driverId: string;
     cashierIn: string;
     cashierOut: string;
+    price:number
 }
 
 const deliverySchema = new Schema(
@@ -49,6 +50,10 @@ const deliverySchema = new Schema(
             type: String,
             max: 50,
         },
+        price:{
+            type:Number,
+            max:50
+        }
     },
     { timestamps: true }
 );

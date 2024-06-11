@@ -1,11 +1,11 @@
 import { createSlice,PayloadAction} from "@reduxjs/toolkit";
 
 interface State {
-  activeLink: string;
+  activeLink: string|null;
 }
 
 const initialState: State = {
-  activeLink: "Dashboard",
+  activeLink: null,
 };
 
 const activeLink = createSlice({

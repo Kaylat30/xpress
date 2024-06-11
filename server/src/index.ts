@@ -13,8 +13,8 @@ import { addStaff, getStaff,deleteStaff, updateStaff,getStaffInfo } from "./rout
 import { deleteDelivery, getDelivery, getDeliveryInfo, updateDelivery } from "./routes/delivery.js";
 import { deleteClient, updateClient,  addClient, getClient,getClientInfo } from "./routes/client.js";
 import { getPack,updatePack } from "./routes/pack.js";
-import {addItem, getItem, deleteItem, updateItem, checkout} from "./routes/received.js";
-import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem} from "./routes/staged.js";
+import {addItem, getItem, deleteItem, updateItem, checkout,getItemInfo} from "./routes/received.js";
+import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem,getStagedItemInfo} from "./routes/staged.js";
 
 
 
@@ -96,10 +96,12 @@ app.use("/updateStaff",updateStaff)
 app.use("/checkout",checkout)
 app.use("/addItem",addItem)
 app.use("/getItem",getItem)
+app.use("/getItemInfo",getItemInfo)
 app.use("/deleteItem",deleteItem)
 app.use("/updateItem",updateItem)
 app.use("/addStagedItem",addStagedItem)
 app.use("/getStagedItem",getStagedItem)
+app.use("/getStagedItemInfo",getStagedItemInfo)
 app.use("/deleteStagedItem",deleteStagedItem)
 app.use("/updateStagedItem",updateStagedItem)
 app.use("/getPack",getPack)

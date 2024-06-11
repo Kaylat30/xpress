@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { addStagedItem, getStagedItems, deleteStagedItem, updateStagedItem } from '../api'; // Adjust the path to your API functions
+import { addStagedItem, getStagedItems, deleteStagedItem, updateStagedItem, getStagedItemInfo } from '../api'; // Adjust the path to your API functions
 
 interface StagedItem {
-  itemId: string;
-  item: string;
-  name: string;
-  address: string;
-  contact: number;
-  email: string;
-  status?: string;
-  clientId?: string;
+    itemId: string;
+    item: string;
+    status: string;
+    clientId: string;
+    name: string;
+    address: string;
+    contact: number;
+    email: string;
+    user: string;
 }
+
 
 interface StagedItemState {
   stagedItems: StagedItem[];
@@ -59,12 +61,28 @@ export const getStagedItemsAsync = createAsyncThunk<StagedItem[], void, { reject
   }
 );
 
+export const getStagedItemInfoAsync = createAsyncThunk< StagedItem, string, { rejectValue: { message: string } }>(
+  'stagedItems/getStagedItemInfo',
+  async (itemId, { rejectWithValue }) => {
+    try {
+      const data = await getStagedItemInfo(itemId);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error fetching blog details:', error.message);
+        throw rejectWithValue({ message: error.message });
+      }
+      throw rejectWithValue({ message: 'An error occurred while fetching blog details' });
+    }
+  }
+);
+
 export const deleteStagedItemAsync = createAsyncThunk<string, { itemId: string; clientId: string }, { rejectValue: { message: string } }>(
   'stagedItems/deleteStagedItem',
-  async ({ itemId, clientId }, { rejectWithValue }) => {
+  async (stagedItemIds, { rejectWithValue }) => {
     try {
-      await deleteStagedItem(itemId, clientId);
-      return itemId; // Return the itemId to use in the fulfilled case
+      const data = await deleteStagedItem(stagedItemIds.itemId, stagedItemIds.clientId);
+      return data; // Return the itemId to use in the fulfilled case
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue({ message: error.message });
@@ -132,6 +150,19 @@ const stagedItemSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error';
       })
+      .addCase(getStagedItemInfoAsync.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear error on pending
+      })
+      .addCase(getStagedItemInfoAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.stagedItems = [action.payload]; // Update single client in array
+        state.error = null; // Clear error on success
+      })
+      .addCase(getStagedItemInfoAsync.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message ?? 'Unknown error'; // Set error message
+      })
       .addCase(deleteStagedItemAsync.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -168,6 +199,10 @@ export const { clearStagedItems } = stagedItemSlice.actions;
 
 // Selector functions
 export const selectStagedItems = (state: { stagedItems: StagedItemState }) => state.stagedItems.stagedItems;
+export const selectStagedItem = (state: { stagedItems:StagedItemState }) => state.stagedItems.stagedItems[0]; 
+export const selectStagedItemById = (itemId: string) => (state: { stagedItems: StagedItemState }): StagedItem | undefined => {
+  return state.stagedItems.stagedItems.find(stagedItem => stagedItem.itemId === itemId);
+};
 export const selectStagedItemsStatus = (state: { stagedItems: StagedItemState }) => state.stagedItems.status;
 export const selectStagedItemsError = (state: { stagedItems: StagedItemState }) => state.stagedItems.error;
 

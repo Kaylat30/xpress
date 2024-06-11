@@ -103,7 +103,7 @@ export const addStagedItem = async (req: Request, res: Response) => {
 };
 
 
-//get item
+//get items
 export const getStagedItem = async (req: Request, res: Response) => {
     try {
 
@@ -116,7 +116,7 @@ export const getStagedItem = async (req: Request, res: Response) => {
         });
       }
    
-      const stagedItems = await Staged.find();
+      const stagedItems = await Staged.find(query);
   
       if (stagedItems.length < 1) {
         return res.status(200).json({ 
@@ -142,6 +142,28 @@ export const getStagedItem = async (req: Request, res: Response) => {
       });
     }
 };
+
+//get itemInfo
+export const getStagedItemInfo = async (req: Request, res: Response) =>
+  {
+      try {
+          const {itemId} = req.body
+          const stagedItemInfo = await Staged.findOne({ itemId: itemId })
+          return res.status(200).json(stagedItemInfo)
+      } catch (error) {
+          if (error instanceof Error) {
+              return res.status(500).json({
+                  success: false,
+                  error: error.message,
+              });
+          }
+          // Handle other cases where 'error' is not of type 'Error'
+          return res.status(500).json({
+              success: false,
+              error: 'An unexpected error occurred',
+          });
+      }
+  }
 
 //delete item
 export const deleteStagedItem = async (req: Request, res: Response) => {

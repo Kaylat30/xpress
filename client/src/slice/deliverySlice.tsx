@@ -9,7 +9,7 @@ interface DeliveryItem {
   driverId: string;
   cashierIn: string;
   cashierOut: string;
-  
+  price: number;
 }
 
 interface DeliveryState {
