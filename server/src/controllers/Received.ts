@@ -58,8 +58,8 @@ export const addItem = async (req: Request, res: Response) => {
         const updatedDelivery = await Delivery.findOneAndUpdate(
             {itemId:itemId},
             {
-              $set: {
-                status: "Received",
+              status: "Received",
+              $set: {                
                 cashierOut: staffId,
               },
             },

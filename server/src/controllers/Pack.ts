@@ -56,8 +56,8 @@ export const updatePack = async (req: Request, res: Response) => {
     const updatedDelivery = await Delivery.findOneAndUpdate(
       { itemId: itemId },
       {
-        $set: {
-          status: 'Shipped',
+        status: 'Shipped',
+        $set: {          
           DriverId: driverId,
         },
       },
