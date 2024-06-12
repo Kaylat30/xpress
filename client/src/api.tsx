@@ -1,4 +1,4 @@
-//export const url: string = "https://retinoweb-server.vercel.app";
+//export const url: string = "https://xpresss.vercel.app";
 export const url: string = "http://localhost:3000";
 
   

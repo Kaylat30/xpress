@@ -197,15 +197,23 @@ export default function DashboardCashier() {
                     <button type="submit" className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center" onClick={()=> handleAddReceived(receivedItemId!)}><span className="text-2xl text-white"><IoAddSharp/></span> Add Item</button>
                 </Form>
             </div>
-            <div className="space-y-2 bg-white rounded-lg shadow-xl p-5 h-40">
+            <div className="space-y-2 bg-white rounded-lg shadow-xl p-5 h-52">
                 <h2 className="font-semibold">Checkout</h2>
-                <Form className="space-y-2">
-                    <span>ItemID:</span>
-                    <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id" value={checkoutItem.itemId} onChange={(e)=> setCheckoutItem({...checkoutItem,itemId: e.target.value})}/>
-                    <span>Price:</span>
-                    <input type="number" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Price" value={checkoutItem.price} onChange={(e)=> setCheckoutItem({...checkoutItem, price: parseInt(e.target.value)})}/>
+                <Form className="space-y-2 ">
+                    <div className="grid grid-cols-1 grid-rows-2">
+                        <div className="m-1">
+                        <span>ItemID:</span>
+                        <input type="text" className="bg-gray-100 rounded-md p-2 ml-2" placeholder="Enter Item Id" value={checkoutItem.itemId} onChange={(e)=> setCheckoutItem({...checkoutItem,itemId: e.target.value})}/>
+                        </div>
+                        <div className="m-1">
+                        <span>Price:</span>
+                        <input type="number" className="bg-gray-100 w-20 rounded-md p-2 ml-2" placeholder="Enter Price" value={checkoutItem.price} onChange={(e)=> setCheckoutItem({...checkoutItem, price: parseInt(e.target.value)})}/>
+                        </div>                         
+                    </div>
                     <button type="submit" className="bg-brightBlue text-white rounded-md sm:p-2 px-1 flex items-center" onClick={()=> handleCheckout(checkoutItem.itemId,checkoutItem.price)}><span className="text-2xl text-white"><IoAddSharp/></span> Checkout</button>
+
                 </Form>
+                
             </div>            
         </div>
 
