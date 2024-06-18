@@ -656,7 +656,7 @@ export default function Analysis() {
     setClientChartData(clientChartData1);
 
     setLoading(false); // Set loading state to false after generating data
-  }, []);
+  }, [newClientsCurrentMonth,newClientsPreviousMonth,newStaffsCurrentMonth,newStaffsPreviousMonth]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -784,7 +784,7 @@ export default function Analysis() {
                 fill="#8884d8"
                 label
               >
-                {staffChartData.map((entry, index) => (
+                {staffChartData.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -810,7 +810,7 @@ export default function Analysis() {
                 fill="#8884d8"
                 label
               >
-                {clientChartData.map((entry, index) => (
+                {clientChartData.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

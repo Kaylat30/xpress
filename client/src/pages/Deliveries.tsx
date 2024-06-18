@@ -28,11 +28,11 @@ export default function Deliveries() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "delivered":
+      case "Delivered":
         return "bg-green-500";
-      case "return":
+      case "Shipped":
         return "bg-red-500";
-      case "pending":
+      case "Pending":
         return "bg-yellow-300";
       default:
         return "bg-gray-200";
@@ -148,8 +148,9 @@ export default function Deliveries() {
                         <tbody className="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full h-96" >
                         {filteredDeliverys.map((item:DeliveryItem) => (
                             <tr key={item.itemId} className="flex w-full mb-4">
+                              <td className="p-4 w-1/4 border-b">{item.itemId}</td>
                             <td className="p-4 w-1/4 border-b">{item.item}</td>
-                            <td className="p-4 w-1/4 border-b">${item.driverId}</td>
+                            <td className="p-4 w-1/4 border-b">{item.driverId}</td>
                             <td className="p-4 w-1/4 border-b"><span className={`${getStatusColor(item.status)} text-white p-1 rounded-md`}>{item.status}</span></td>
                             <td className="p-4 w-1/4 border-b">{item.clientId}</td>
                             <td className="p-4 w-1/4 border-b">{item.cashierIn}</td>

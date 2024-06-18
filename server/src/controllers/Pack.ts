@@ -39,13 +39,13 @@ export const updatePack = async (req: Request, res: Response) => {
     const { itemId } = req.body;
 
     const driverId = (req.user as { staffId?: string })?.staffId;
-
+    console.log(driverId)
     // Find the pack by id and update
     const updatedPack = await Pack.findOneAndUpdate(
       { itemId: itemId },
-      {
+      {        
         $set: {
-          status: 'Approved',
+          status: 'Approved',         
           DriverId: driverId,
         },
       },

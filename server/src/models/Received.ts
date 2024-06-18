@@ -52,8 +52,7 @@ const receivedSchema = new Schema(
         contact: {
             type: Number,
             required: true,
-            min: 10,
-            max: 50,
+            min: 10,            
         },
         email: {
             type: String,

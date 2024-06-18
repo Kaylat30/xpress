@@ -19,8 +19,8 @@ import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem,getStag
 
 
 //const url = 'http://localhost:5173'
-//const url = "http://127.0.0.1:5173"
-const url = 'https://xpresss.vercel.app'
+const url = "http://127.0.0.1:5173"
+//const url = 'https://xpresss.vercel.app'
 
 const  app = express()
 app.use(express.json())   
@@ -61,8 +61,8 @@ app.use(session({
     cookie:{
         maxAge: 21600000, 
         httpOnly: true,
-        secure:true,   
-        sameSite: 'none'  
+        // secure:true,   
+        // sameSite: 'none'  
     }
 }))
 app.use(cookieParser(process.env.JWT_SECRET));

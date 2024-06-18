@@ -1,5 +1,5 @@
-export const url: string = "https://xpress-server.vercel.app";
-//export const url: string = "http://localhost:3000";
+//export const url: string = "https://xpress-server.vercel.app";
+export const url: string = "http://localhost:3000";
 
   
   export const loginUser = async (email: string, password: string)=> {

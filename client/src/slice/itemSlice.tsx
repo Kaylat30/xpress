@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addItem, getItem, deleteItem, updateItem, checkout, getItemInfo } from '../api'; // Adjust the path to your API functions
 
 interface Item {
-  itemId: string;
+  itemId: string
   item: string;
   status: string;
   clientId: string;
@@ -195,12 +195,10 @@ const itemSlice = createSlice({
       })
       .addCase(checkoutItemAsync.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const index = state.items.findIndex(item => item.itemId === action.payload.itemId);
-        if (index !== -1) {
-          state.items[index] = action.payload;
-        }
         state.error = null;
+        state.items = state.items.filter(item => item.itemId !== action.meta.arg.itemId);
       })
+      
       .addCase(checkoutItemAsync.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload?.message ?? 'Unknown error';

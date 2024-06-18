@@ -26,11 +26,16 @@ export default function DashboardDriver() {
     dispatch(getPackItemsAsync());
   }, [dispatch]);
 
+  const fetchItems = () => {
+    dispatch(getPackItemsAsync());
+  };
+
   const packs = useSelector(selectPackItems) as PackItem[]; 
 
 
   const handleApprovePack = (itemId: string) => {
     dispatch(approvePackItemAsync(itemId));
+    fetchItems();
   }
 
   const filteredPacks = Array.isArray(packs) ? packs.filter((packs: PackItem) => {
@@ -42,11 +47,11 @@ export default function DashboardDriver() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "approved":
+      case "Approved":
         return "bg-green-500";
-      case "pending":
+      case "Pending":
         return "bg-red-500";
-      case "shipped":
+      case "Shipped":
         return "bg-yellow-300";
       default:
         return "bg-gray-200";
