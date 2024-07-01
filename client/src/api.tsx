@@ -10,6 +10,7 @@ export const url: string = "https://xpress-server.vercel.app";
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({staffId:email,password:password}),
+        credentials: 'include'
       });
   
       if (!response.ok) {

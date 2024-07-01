@@ -72,7 +72,7 @@ app.use(passport.session())
 // MONGOOSE SETUP
 // const PORT: string | undefined = process.env.PORT || '5000';
 // const portNumber: number = parseInt(PORT, 10) || 5000;
-const PORT:any = process.env.PORT || 5000;
+const PORT:any = process.env.PORT;
 mongoose
     .connect(mongoUrl)
     // , { 
