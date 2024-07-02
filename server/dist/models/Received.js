@@ -40,7 +40,6 @@ const receivedSchema = new Schema({
         type: Number,
         required: true,
         min: 10,
-        max: 50,
     },
     email: {
         type: String,

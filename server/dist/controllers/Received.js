@@ -31,8 +31,8 @@ export const addItem = async (req, res) => {
         });
         const savedItem = await item1.save();
         const updatedDelivery = await Delivery.findOneAndUpdate({ itemId: itemId }, {
+            status: "Received",
             $set: {
-                status: "Received",
                 cashierOut: staffId,
             },
         }, { new: true } // Return the updated client
@@ -85,6 +85,27 @@ export const getItem = async (req, res) => {
             });
         }
         return res.status(200).json(stagedItems);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            return res.status(500).json({
+                success: false,
+                error: error.message,
+            });
+        }
+        // Handle other cases where 'error' is not of type 'Error'
+        return res.status(500).json({
+            success: false,
+            error: 'An unexpected error occurred',
+        });
+    }
+};
+//get ClientIfo
+export const getItemInfo = async (req, res) => {
+    try {
+        const { itemId } = req.body;
+        const receivedItems = await Received.findOne({ itemId: itemId });
+        return res.status(200).json(receivedItems);
     }
     catch (error) {
         if (error instanceof Error) {
@@ -188,13 +209,14 @@ export const updateItem = async (req, res) => {
 //checking out cart items
 export const checkout = async (req, res) => {
     try {
-        const { itemId } = req.body;
+        const { itemId, price } = req.body;
         const staffId = req.user?.staffId;
         await Received.findOneAndDelete({ itemId: itemId });
-        const updateditem = await Delivery.findOneAndUpdate({ itemId: itemId }, {
-            status: "Delivered",
-            cashierOut: staffId,
-        }, { new: true } // Return the updated item
+        const updateditem = await Delivery.findOneAndUpdate({ itemId: itemId }, { $set: {
+                status: "Delivered",
+                cashierOut: staffId,
+                price: price
+            } }, { new: true } // Return the updated item
         );
         if (!updateditem) {
             return res.status(404).json({

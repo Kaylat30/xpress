@@ -23,7 +23,7 @@ import {addStagedItem, getStagedItem, deleteStagedItem, updateStagedItem,getStag
 const url = 'https://xpresss.vercel.app'
 
 const  app = express()
-app.use(express.json())   
+app.use(express.json())    
 app.use(cors({ 
     origin: url,
     methods: ['GET','POST','PATCH','DELETE','PUT'],

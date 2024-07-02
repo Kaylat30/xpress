@@ -37,6 +37,10 @@ const deliverySchema = new Schema({
         type: String,
         max: 50,
     },
+    price: {
+        type: Number,
+        max: 50
+    }
 }, { timestamps: true });
 const Delivery = model('Delivery', deliverySchema);
 export default Delivery;

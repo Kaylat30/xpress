@@ -1,6 +1,6 @@
-import Client from "../models/Client";
-import Received from "../models/Received";
-import Staged from "../models/Staged";
+import Client from "../models/Client.js";
+import Received from "../models/Received.js";
+import Staged from "../models/Staged.js";
 //add Client 
 export const addClient = async (req, res) => {
     try {
@@ -62,13 +62,13 @@ export const getClient = async (req, res) => {
     }
 };
 //get ClientIfo
-export const getClientInfo = async (req,res) =>
-{
+export const getClientInfo = async (req, res) => {
     try {
-        const clientId = req.body
-        const client = await Client.findOne({ clientId: clientId })
-        return res.status(200).json(client)
-    } catch (error) {
+        const { clientId } = req.body;
+        const client = await Client.findOne({ clientId: clientId });
+        return res.status(200).json(client);
+    }
+    catch (error) {
         if (error instanceof Error) {
             return res.status(500).json({
                 success: false,
@@ -81,14 +81,14 @@ export const getClientInfo = async (req,res) =>
             error: 'An unexpected error occurred',
         });
     }
-}
+};
 //delete Client
 export const deleteClient = async (req, res) => {
     try {
         const { clientId } = req.body;
-        const deletedClient = await Client.findByOneAndDelete({clientId:clientId});
-        const deletedStaged = await Staged.findByOneAndDelete({clientId:clientId});
-        const deletedReceived = await Received.findByOneAndDelete({clientId:clientId});
+        const deletedClient = await Client.findOneAndDelete({ clientId: clientId });
+        const deletedStaged = await Staged.findOneAndDelete({ clientId: clientId });
+        const deletedReceived = await Received.findOneAndDelete({ clientId: clientId });
         if (!deletedClient) {
             return res.status(404).json({
                 success: false,
@@ -122,21 +122,21 @@ export const updateClient = async (req, res) => {
     try {
         const { clientId, name, contact, address, email } = req.body;
         // Find the client by id
-        const updatedClient = await Client.findByOneAndUpdate({clientId:clientId}, {
+        const updatedClient = await Client.findOneAndUpdate({ clientId: clientId }, {
             name: name,
             address: address,
             contact: contact,
             email: email,
         }, { new: true } // Return the updated client
         );
-        const updatedStagedClient = await Staged.findByOneAndUpdate(clientId, {
+        const updatedStagedClient = await Staged.findOneAndUpdate({ clientId: clientId }, {
             name: name,
             address: address,
             contact: contact,
             email: email,
         }, { new: true } // Return the updated client
         );
-        const updatedReceivedClient = await Received.findByOneAndUpdate(clientId, {
+        const updatedReceivedClient = await Received.findOneAndUpdate({ clientId: clientId }, {
             name: name,
             address: address,
             contact: contact,

@@ -84,6 +84,27 @@ export const getStaff = async (req, res) => {
         });
     }
 };
+//get StaffIfo
+export const getStaffInfo = async (req, res) => {
+    try {
+        const { staffId } = req.body;
+        const staff = await Staff.findOne({ staffId: staffId });
+        return res.status(200).json(staff);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            return res.status(500).json({
+                success: false,
+                error: error.message,
+            });
+        }
+        // Handle other cases where 'error' is not of type 'Error'
+        return res.status(500).json({
+            success: false,
+            error: 'An unexpected error occurred',
+        });
+    }
+};
 //delete staff
 export const deleteStaff = async (req, res) => {
     try {

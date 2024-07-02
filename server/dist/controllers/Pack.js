@@ -33,6 +33,7 @@ export const updatePack = async (req, res) => {
     try {
         const { itemId } = req.body;
         const driverId = req.user?.staffId;
+        console.log(driverId);
         // Find the pack by id and update
         const updatedPack = await Pack.findOneAndUpdate({ itemId: itemId }, {
             $set: {
@@ -42,8 +43,8 @@ export const updatePack = async (req, res) => {
         }, { new: true });
         // Find the delivery by id and update
         const updatedDelivery = await Delivery.findOneAndUpdate({ itemId: itemId }, {
+            status: 'Shipped',
             $set: {
-                status: 'Shipped',
                 DriverId: driverId,
             },
         }, { new: true });

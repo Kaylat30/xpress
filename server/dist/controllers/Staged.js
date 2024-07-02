@@ -74,7 +74,7 @@ export const addStagedItem = async (req, res) => {
         });
     }
 };
-//get item
+//get items
 export const getStagedItem = async (req, res) => {
     try {
         const query = { branch: req.user?.branch };
@@ -84,7 +84,7 @@ export const getStagedItem = async (req, res) => {
                 message: 'Item not found',
             });
         }
-        const stagedItems = await Staged.find();
+        const stagedItems = await Staged.find(query);
         if (stagedItems.length < 1) {
             return res.status(200).json({
                 success: true,
@@ -93,6 +93,27 @@ export const getStagedItem = async (req, res) => {
             });
         }
         return res.status(200).json(stagedItems);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            return res.status(500).json({
+                success: false,
+                error: error.message,
+            });
+        }
+        // Handle other cases where 'error' is not of type 'Error'
+        return res.status(500).json({
+            success: false,
+            error: 'An unexpected error occurred',
+        });
+    }
+};
+//get itemInfo
+export const getStagedItemInfo = async (req, res) => {
+    try {
+        const { itemId } = req.body;
+        const stagedItemInfo = await Staged.findOne({ itemId: itemId });
+        return res.status(200).json(stagedItemInfo);
     }
     catch (error) {
         if (error instanceof Error) {
